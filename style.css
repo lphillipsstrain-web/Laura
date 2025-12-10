@@ -243,14 +243,14 @@ body {
 }
 
 .btn-solid {
-  background-color: var(--accent-amber);
+  background-color: var(--accent-amber);        /* now your frost tone */
   color: #020617;
-  box-shadow: 0 12px 34px rgba(251, 191, 36, 0.35);
+  box-shadow: 0 12px 34px rgba(185, 194, 204, 0.25);
 }
 
 .btn-solid:hover {
   transform: translateY(-1px);
-  box-shadow: 0 16px 40px rgba(251, 191, 36, 0.45);
+  box-shadow: 0 16px 40px rgba(185, 194, 204, 0.35);
 }
 
 .btn-outline {
