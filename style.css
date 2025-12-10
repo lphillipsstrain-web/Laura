@@ -1,22 +1,22 @@
 /* ===== Base theme ===== */
 
 :root {
-  --bg: #060606;
-  --bg-alt: #0b0b0e;
-  --panel: #131316;
-  --panel-soft: #18181d;
+  --bg: #030304;
+  --bg-alt: #0a0a0d;
+  --panel: #121216;
+  --panel-soft: #1a1a1f;
 
-  --border-strong: #e5e7eb;
-  --border-subtle: rgba(140, 140, 150, 0.55);
+  --border-strong: #e3e5ea;
+  --border-subtle: rgba(155, 160, 168, 0.55);
 
-  --accent-amber: #b3472f;    /* rust / bloodroot */
-  --accent-moss: #6c7360;     /* lichen on steel */
-  --accent-violet: #6a4f85;   /* smoke violet */
+  --accent-amber: #b9c2cc;   /* frost */
+  --accent-moss: #8fa3a8;    /* winter green */
+  --accent-violet: #b7a4d8;  /* spirit violet */
 
-  --text-main: #f6f6f6;
-  --text-muted: #959595;
+  --text-main: #e6e8eb;
+  --text-muted: #9ba0a8;
 
-  --shadow-soft: 0 20px 42px rgba(0, 0, 0, 0.85);
+  --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.8);
 
   --radius-sm: 6px;
   --radius-md: 12px;
