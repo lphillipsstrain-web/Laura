@@ -293,6 +293,38 @@ h3 {
   color: var(--text-muted);
 }
 
+/* ==== Headings use wordmark font ==== */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--text-main);
+}
+
+/* Hero & section headings should feel more sculpted */
+h1 {
+  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  line-height: 1.15;
+}
+
+h3 {
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  line-height: 1.25;
+}
+
+/* Optional: subtle softness for mythic feel */
+.section-heading h1,
+.section-heading h2 {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
 /* ===== About ===== */
 
 .section-about {
