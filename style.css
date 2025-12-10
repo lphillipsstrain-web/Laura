@@ -104,7 +104,7 @@ body {
   color: var(--text-main);
   text-decoration: none;
   padding-block: 0.2rem;
-  border-bottom: 2px solid var(--accent-amber);
+  border-bottom: 2px solid var(--accent-moss);
 }
 
 .site-nav {
@@ -248,14 +248,14 @@ body {
 }
 
 .btn-solid {
-  background-color: var(--accent-amber);        /* now your frost tone */
+  background-color: var(--accent-moss);
   color: #020617;
-  box-shadow: 0 12px 34px rgba(185, 194, 204, 0.25);
+  box-shadow: 0 12px 34px rgba(78, 163, 119, 0.32);
 }
 
 .btn-solid:hover {
   transform: translateY(-1px);
-  box-shadow: 0 16px 40px rgba(185, 194, 204, 0.35);
+  box-shadow: 0 16px 40px rgba(78, 163, 119, 0.44);
 }
 
 .btn-outline {
