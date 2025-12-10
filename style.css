@@ -222,15 +222,6 @@ body {
   transform: scale(1.03);
 }
 
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(to left, #040507 5%, transparent 40%),
-    radial-gradient(circle at bottom, rgba(15, 23, 42, 0.8), #020617);
-  mix-blend-mode: multiply;
-}
-
 /* ===== Buttons ===== */
 
 .btn {
