@@ -1,22 +1,22 @@
 /* ===== Base theme ===== */
 
 :root {
-  --bg: #040607;
-  --bg-alt: #0a0f0c;
-  --panel: #0f1612;
-  --panel-soft: #131c17;
+  --bg: #050505;
+  --bg-alt: #0a0a0a;
+  --panel: #111111;
+  --panel-soft: #1a1a1a;
 
-  --border-strong: #e5e7eb;
-  --border-subtle: rgba(141, 161, 147, 0.45);
+  --border-strong: #e5e5e5;
+  --border-subtle: rgba(160, 160, 160, 0.55);
 
-  --accent-amber: #d88b28;   /* ember */
-  --accent-moss: #3fa96c;    /* moss */
-  --accent-violet: #7a4bb5;  /* wyrd violet */
+  --accent-amber: #c4b69d;  /* bone */
+  --accent-moss: #8e8e73;   /* clay / lichen */
+  --accent-violet: #6a5e7d; /* muted mineral purple */
 
-  --text-main: #f5f7f4;
-  --text-muted: #8da193;
+  --text-main: #f2f2f2;
+  --text-muted: #9c9c9c;
 
-  --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.7);
+  --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.8);
 
   --radius-sm: 6px;
   --radius-md: 12px;
