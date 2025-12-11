@@ -339,11 +339,22 @@ h3 {
 }
 
 .about-aside {
-  align-self: start;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;        /* space between the two boxes */
+  padding: 0;       /* the boxes themselves will have padding */
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+
+.aside-block {
   background-color: var(--panel);
   border: 1px solid var(--border-subtle);
   padding: 1.3rem 1.4rem;
   box-shadow: var(--shadow-soft);
+  border-radius: var(--radius-md);
 }
 
 .pill-heading {
@@ -366,7 +377,8 @@ h3 {
 }
 
 .aside-list li {
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.9rem;    /* more breathing room between bullets */
+  line-height: 1.6;         /* makes each line easier to read */
 }
 
 .section-about .about-intro {
