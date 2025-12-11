@@ -370,10 +370,7 @@ h3 {
 }
 
 .section-about .about-intro {
-  /* reuse hero lead tone */
-  color: var(--text-main);
-  opacity: 0.96;
-  font-size: 1.06rem;
+  color: var(--text-muted); /* Matches aside paragraph color */
 }
 
 /* ===== Photography grid ===== */
