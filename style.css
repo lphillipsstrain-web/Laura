@@ -369,6 +369,13 @@ h3 {
   margin-bottom: 0.35rem;
 }
 
+.section-about .about-intro {
+  /* reuse hero lead tone */
+  color: var(--text-main);
+  opacity: 0.96;
+  font-size: 1.06rem;
+}
+
 /* ===== Photography grid ===== */
 
 .section-photos {
