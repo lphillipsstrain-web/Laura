@@ -107,6 +107,17 @@ body {
   text-decoration: none;
   padding-block: 0.2rem;
   border-bottom: 2px solid var(--accent-moss);
+  
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.header-logo {
+  height: 1em;     /* EXACTLY matches text height */
+  width: auto;
+  transform: translateY(1px); /* adjust 0–2px as needed */
 }
 
 .site-nav {
