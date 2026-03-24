@@ -19,6 +19,18 @@
   </script>
 </head>
 
+<script>
+  // Disable right-click
+  document.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+  });
+
+  // Disable drag on images
+  document.querySelectorAll("img").forEach(img => {
+    img.setAttribute("draggable", "false");
+  });
+</script>
+  
 <body>
   <header class="site-header">
     <div class="shell header-inner">
