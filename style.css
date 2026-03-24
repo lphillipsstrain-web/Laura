@@ -673,6 +673,22 @@ h3 {
   letter-spacing: normal;
 }
 
+.footer-brand {
+  display: flex;
+  align-items: center;   /* THIS aligns logo + text vertically */
+  gap: 10px;
+}
+
+.footer-logo {
+  height: 20px;
+  width: auto;
+  transform: translateY(1px); /* subtle nudge */
+}
+
+.footer-meta {
+  margin: 0;
+}
+
 /* ===== Responsive ===== */
 
 @media (max-width: 960px) {
