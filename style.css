@@ -615,6 +615,8 @@ h3 {
 }
 
 .lightbox img {
+  position: relative;
+  z-index: 41;
   max-width: min(94vw, 1200px);
   max-height: 90vh;
   border-radius: var(--radius-md);
@@ -627,11 +629,73 @@ h3 {
 }
 
 .lightbox-close {
-  position: fixed;
-  inset: 0;
-  cursor: zoom-out;
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 43;
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(4px);
 }
 
+.lightbox-close::before,
+.lightbox-close::after {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 2px;
+  background: #fff;
+  border-radius: 999px;
+}
+
+.lightbox-close::before {
+  transform: rotate(45deg);
+}
+
+.lightbox-close::after {
+  transform: rotate(-45deg);
+}
+
+.lightbox-prev,
+.lightbox-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 43;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.75rem;
+  line-height: 1;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(4px);
+}
+
+.lightbox-prev {
+  left: 1.25rem;
+}
+
+.lightbox-next {
+  right: 1.25rem;
+}
+
+.lightbox-prev:hover,
+.lightbox-next:hover,
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
 /* ===== Journal ===== */
 
 .section-journal {
