@@ -27,12 +27,12 @@
         <span>MODERN HEATHEN</span>
       </a>
 
-      <button type="button" class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <button type="button" id="navToggle" class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="siteNav">
         <span></span>
         <span></span>
       </button>
 
-      <nav class="site-nav">
+      <nav id="siteNav" class="site-nav">
         <a href="#about">About</a>
         <a href="photography.html">Photography</a>
        <!-- <a href="journal.html">Journal</a> -->
@@ -397,22 +397,28 @@
 </script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const navToggle = document.querySelector('.nav-toggle');
-    const siteNav = document.querySelector('.site-nav');
-
-    console.log('navToggle:', navToggle);
-    console.log('siteNav:', siteNav);
+  window.addEventListener('load', function () {
+    const navToggle = document.getElementById('navToggle');
+    const siteNav = document.getElementById('siteNav');
 
     if (!navToggle || !siteNav) {
-      console.log('Nav toggle or site nav not found');
+      alert('Nav elements not found');
       return;
     }
 
-    navToggle.addEventListener('click', function () {
+    navToggle.addEventListener('click', function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
       const isOpen = siteNav.classList.toggle('is-open');
       navToggle.setAttribute('aria-expanded', String(isOpen));
-      console.log('clicked, is-open:', isOpen);
+    });
+
+    document.addEventListener('click', function (event) {
+      if (!siteNav.contains(event.target) && !navToggle.contains(event.target)) {
+        siteNav.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      }
     });
   });
 </script>
