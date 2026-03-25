@@ -142,7 +142,7 @@
 
     <!-- PHOTOGRAPHY -->
     <section id="photography" class="section">
-  <div class="shell section-inner section-split">
+  <div class="shell section-inner">
     <div class="section-copy">
       <h2>Photography</h2>
       <p>
@@ -155,75 +155,70 @@
       </p>
     </div>
 
-    <div class="photo-grid">
-      <!-- Card 1 -->
-      <figure class="photo-card">
-       <a href="photography.html#img1" class="photo-link">
-          <div class="photo-media" style="background-image: url('assets/web_Rooted at the Edge.jpg');"></div>
-       </a>
-        
-        <figcaption>
-          <span class="photo-title">Rooted at the Edge</span>
-          <span class="photo-note">A low wall holds the fall at bay, while a single tree keeps its ground.</span>
-        </figcaption>
-      </figure>
+    <div class="photo-slider-wrap">
+      <button class="photo-slider-btn photo-slider-prev" aria-label="Previous photographs" type="button">
+        &#8592;
+      </button>
 
-      <!-- Card 2 -->
-      <figure class="photo-card">
-        <a href="photography.html#img8" class="photo-link">
-          <div class="photo-media" style="background-image: url('assets/web_Continuum.jpg');"></div>
-        </a>
-      
-        <figcaption>
-          <span class="photo-title">Continuum</span>
-          <span class="photo-note">Water spreads across the terraces, turning movement into travertine. (Companion to Accretion & Limestone Lacework)</span>
-        </figcaption>
-      </figure>
-
-      <!-- Card 3 -->
-      <figure class="photo-card">
-        <div class="photo-media" style="background-image: url('assets/web_Green Stone.jpg');"></div>
-        <figcaption>
-          <span class="photo-title">Green Stone</span>
-          <span class="photo-note">Ferns rise from the stone as if the wall itself has learned to grow.</span>
-        </figcaption>
-      </figure>
-
-      <!-- Card 4 -->
-      <figure class="photo-card">
-        <a href="photography.html#img14" class="photo-link">
-          <div class="photo-media" style="background-image: url('assets/web_Brutal Reflection.jpg');"></div>
-        </a>
+      <div class="photo-slider" id="photoSlider">
+        <div class="photo-slider-track">
           
-        <figcaption>
-          <span class="photo-title">Brutal Reflection</span>
-          <span class="photo-note">Everything will kill you in Yellowstone.</span>
-        </figcaption>
-      </figure>
+          <article class="photo-slide">
+            <a href="photography.html#img1" class="photo-slide-link">
+              <div class="photo-slide-media" style="background-image: url('assets/web_Rooted at the Edge.jpg');"></div>
+            </a>
+            <div class="photo-slide-caption">
+              <h3>Rooted at the Edge</h3>
+              <p>A low wall holds the fall at bay, while a single tree keeps its ground.</p>
+            </div>
+          </article>
 
-      <!-- Card 5 -->
-      <figure class="photo-card">
-        <a href="photography.html#img9" class="photo-link">
-          <div class="photo-media" style="background-image: url('assets/web_Seated.jpg');"></div>
-        </a>
-          
-        <figcaption>
-          <span class="photo-title">Seated</span>
-          <span class="photo-note">Stillness within a growing place.</span>
-        </figcaption>
-      </figure>
+          <article class="photo-slide">
+            <a href="photography.html#img8" class="photo-slide-link">
+              <div class="photo-slide-media" style="background-image: url('assets/web_Continuum.jpg');"></div>
+            </a>
+            <div class="photo-slide-caption">
+              <h3>Continuum</h3>
+              <p>Water spreads across the terraces, turning movement into travertine.</p>
+            </div>
+          </article>
 
-      <!-- Card 6 -->
-      <figure class="photo-card">
-        <a href="photography.html#img13" class="photo-link">
-          <div class="photo-media" style="background-image: url('assets/web_Sulfur Slope.jpg');"></div>
-        </a>
-        
-        <figcaption>
-          <span class="photo-title">Sulfur Slope</span>
-          <span class="photo-note">Chemically charred forms rise from toxic color.</span>
-        </figcaption>
-      </figure>
+          <article class="photo-slide">
+            <a href="photography.html#img31" class="photo-slide-link">
+              <div class="photo-slide-media" style="background-image: url('assets/web_Green Stone.jpg');"></div>
+            </a>
+            <div class="photo-slide-caption">
+              <h3>Green Stone</h3>
+              <p>Ferns rise from the stone as if the wall itself has learned to grow.</p>
+            </div>
+          </article>
+
+          <article class="photo-slide">
+            <a href="photography.html#img20" class="photo-slide-link">
+              <div class="photo-slide-media" style="background-image: url('assets/web_Stone In Bloom.jpg');"></div>
+            </a>
+            <div class="photo-slide-caption">
+              <h3>Stone In Bloom</h3>
+              <p>A broken surface of pits and seams, holding color in every recess.(Companion to The Overhang)</p>
+            </div>
+          </article>
+
+          <article class="photo-slide">
+            <a href="photography.html#img12" class="photo-slide-link">
+              <div class="photo-slide-media" style="background-image: url('assets/web_Shore Casting.jpg');"></div>
+            </a>
+            <div class="photo-slide-caption">
+              <h3>Shore Casting</h3>
+              <p>Anglers line the shore, casting into cold Pacific surf beneath marine mist.</p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <button class="photo-slider-btn photo-slider-next" aria-label="Next photographs" type="button">
+        &#8594;
+      </button>
     </div>
   </div>
 </section>
@@ -354,6 +349,50 @@
     navToggle.addEventListener('click', () => {
       siteNav.classList.toggle('is-open');
     });
+  }
+</script>
+
+
+<script>
+  const slider = document.querySelector('#photoSlider');
+  const track = slider ? slider.querySelector('.photo-slider-track') : null;
+  const prevBtn = document.querySelector('.photo-slider-prev');
+  const nextBtn = document.querySelector('.photo-slider-next');
+
+  if (slider && track && prevBtn && nextBtn) {
+    let index = 0;
+
+    function getSlidesPerView() {
+      if (window.innerWidth <= 640) return 1;
+      if (window.innerWidth <= 980) return 2;
+      return 3;
+    }
+
+    function updateSlider() {
+      const slides = track.querySelectorAll('.photo-slide');
+      const slidesPerView = getSlidesPerView();
+      const maxIndex = Math.max(0, slides.length - slidesPerView);
+      index = Math.max(0, Math.min(index, maxIndex));
+
+      const slideWidth = slides[0].getBoundingClientRect().width;
+      const gap = parseFloat(getComputedStyle(track).gap) || 0;
+      const offset = index * (slideWidth + gap);
+
+      track.style.transform = `translateX(-${offset}px)`;
+    }
+
+    prevBtn.addEventListener('click', () => {
+      index -= 1;
+      updateSlider();
+    });
+
+    nextBtn.addEventListener('click', () => {
+      index += 1;
+      updateSlider();
+    });
+
+    window.addEventListener('resize', updateSlider);
+    window.addEventListener('load', updateSlider);
   }
 </script>
   
