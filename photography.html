@@ -747,16 +747,22 @@
     </div>
   </footer>
 
-  <script>
-  const navToggle = document.querySelector('.nav-toggle');
-  const siteNav = document.querySelector('.site-nav');
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const navToggle = document.querySelector('.nav-toggle');
+    const siteNav = document.querySelector('.site-nav');
 
-  if (navToggle && siteNav) {
-    navToggle.addEventListener('click', () => {
+    if (!navToggle || !siteNav) {
+      console.log('Nav toggle or site nav not found');
+      return;
+    }
+
+    navToggle.addEventListener('click', function () {
       const isOpen = siteNav.classList.toggle('is-open');
       navToggle.setAttribute('aria-expanded', String(isOpen));
+      console.log('clicked, is-open:', isOpen);
     });
-  }
+  });
 </script>
   
 </body>
