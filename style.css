@@ -190,6 +190,11 @@ body {
     z-index: 1000;
   }
 
+  .site-nav.is-open {
+    display: flex;
+  }
+}
+
 /* ===== Hero ===== */
 
 .hero {
