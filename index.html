@@ -389,24 +389,19 @@
     const navToggle = document.getElementById('navToggle');
     const siteNav = document.getElementById('siteNav');
 
-    if (!navToggle || !siteNav) {
-      alert('Nav elements not found');
-      return;
-    }
+    if (!navToggle || !siteNav) return;
 
     navToggle.addEventListener('click', function (event) {
-      event.preventDefault();
       event.stopPropagation();
-
       const isOpen = siteNav.classList.toggle('is-open');
       navToggle.setAttribute('aria-expanded', String(isOpen));
     });
 
     document.addEventListener('click', function (event) {
-      if (!siteNav.contains(event.target) && !navToggle.contains(event.target)) {
-        siteNav.classList.remove('is-open');
-        navToggle.setAttribute('aria-expanded', 'false');
-      }
+      if (!siteNav.classList.contains('is-open')) return;
+      if (siteNav.contains(event.target) || navToggle.contains(event.target)) return;
+      siteNav.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
     });
   });
 </script>
