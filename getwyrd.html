@@ -41,6 +41,35 @@
       font-family: var(--font-body);
       min-height: 100vh;
       line-height: 1.7;
+      position: relative;
+    }
+ 
+    /* ===== WEB OF WYRD BACKGROUND SIGIL ===== */
+    /*
+      The sigil is a true Web of Wyrd:
+      3 verticals × 3 horizontals + full diagonal X crosses through every cell.
+      Drawn in a square viewBox so it tiles/scales perfectly.
+      Positioned as a full-page background that scrolls with content.
+    */
+    .wow-bg {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: min(900px, 95vw);
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: visible;
+    }
+ 
+    .wow-bg svg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(900px, 95vw);
+      /* height matches the page content — set by JS */
+      overflow: visible;
     }
  
     /* ===== GATE ===== */
@@ -79,8 +108,8 @@
     }
  
     @keyframes gate-pulse {
-      0%,100% { opacity:0.5; text-shadow: 0 0 20px rgba(183,164,227,0.3); }
-      50%     { opacity:1;   text-shadow: 0 0 40px rgba(183,164,227,0.7), 0 0 80px rgba(183,164,227,0.3); }
+      0%,100% { opacity:0.5; text-shadow:0 0 20px rgba(183,164,227,0.3); }
+      50%      { opacity:1;   text-shadow:0 0 40px rgba(183,164,227,0.7), 0 0 80px rgba(183,164,227,0.3); }
     }
  
     .gate-prompt { font-size:0.72rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--text-muted); }
@@ -133,6 +162,8 @@
     .wyrd-back:hover { opacity: 1; color: var(--accent-violet); }
  
     .tree-page {
+      position: relative;
+      z-index: 1;
       width: min(1400px, 100% - 2rem); margin: 0 auto;
       padding: 4rem 0 7rem;
     }
@@ -150,59 +181,39 @@
       margin-bottom: 4rem;
     }
  
-    /*
-      ===== LAYOUT =====
-      5 rows × 3 cols. Grid columns: card | gap | card | gap | card
-      Row 1: center only   (Ásgarður)
-      Row 2: all three     (Niflheimur | Álfheimur | Jötunheimur)
-      Row 3: center only   (Miðgarður)
-      Row 4: all three     (Dvergheimur | Svartálfaheimur | Múspellsheimur)
-      Row 5: center only   (Hel)
- 
-      Rows 1,3,5 use invisible spacer cards on cols 1+3 to maintain column width.
-    */
+    /* ===== GRID ===== */
     .wow-grid {
-      position: relative;
       display: grid;
       grid-template-columns: var(--card-w) var(--col-gap) var(--card-w) var(--col-gap) var(--card-w);
       grid-template-rows: repeat(5, auto);
       row-gap: var(--row-gap);
       justify-content: center;
       align-items: start;
-    }
- 
-    #wowSvg {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      overflow: visible; pointer-events: none; z-index: 0;
+      position: relative;
+      z-index: 2;
     }
  
     .wow-card-wrap { position: relative; z-index: 2; }
  
-    /* Grid placements */
     .pos-r1-c1 { grid-column:1; grid-row:1; visibility:hidden; pointer-events:none; }
     .pos-r1-c2 { grid-column:3; grid-row:1; }
     .pos-r1-c3 { grid-column:5; grid-row:1; visibility:hidden; pointer-events:none; }
- 
     .pos-r2-c1 { grid-column:1; grid-row:2; }
     .pos-r2-c2 { grid-column:3; grid-row:2; }
     .pos-r2-c3 { grid-column:5; grid-row:2; }
- 
     .pos-r3-c1 { grid-column:1; grid-row:3; visibility:hidden; pointer-events:none; }
     .pos-r3-c2 { grid-column:3; grid-row:3; }
     .pos-r3-c3 { grid-column:5; grid-row:3; visibility:hidden; pointer-events:none; }
- 
     .pos-r4-c1 { grid-column:1; grid-row:4; }
     .pos-r4-c2 { grid-column:3; grid-row:4; }
     .pos-r4-c3 { grid-column:5; grid-row:4; }
- 
     .pos-r5-c1 { grid-column:1; grid-row:5; visibility:hidden; pointer-events:none; }
     .pos-r5-c2 { grid-column:3; grid-row:5; }
     .pos-r5-c3 { grid-column:5; grid-row:5; visibility:hidden; pointer-events:none; }
  
     /* ===== NODE CARD ===== */
     .node-card {
-      background: var(--panel);
+      background: rgba(11,12,16,0.88);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
       padding: 1.3rem 1.5rem;
@@ -211,22 +222,22 @@
       position: relative; overflow: hidden;
       opacity: 0; transform: translateY(14px);
       animation: node-appear 0.55s ease forwards;
+      /* slight backdrop blur so sigil glows softly through */
+      backdrop-filter: blur(6px);
     }
  
     @keyframes node-appear { to { opacity:1; transform:translateY(0); } }
  
     .node-card::before {
-      content: ''; position: absolute; inset: 0;
-      opacity: 0; transition: opacity 0.3s ease;
-      pointer-events: none; border-radius: var(--radius-md);
+      content: ''; position: absolute; inset: 0; opacity: 0;
+      transition: opacity 0.3s ease; pointer-events: none;
+      border-radius: var(--radius-md);
     }
     .node-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-soft); }
     .node-card:hover::before { opacity: 1; }
- 
-    /* Spacer cards never animate */
     .wow-card-wrap[aria-hidden="true"] .node-card { animation: none; opacity:0; }
  
-    /* Realm colors */
+    /* Realm accent colors */
     .node-asgardr       { border-color:rgba(183,164,227,0.35); }
     .node-asgardr::before { background:radial-gradient(circle at top,rgba(183,164,227,0.09),transparent 70%); }
     .node-asgardr:hover   { border-color:rgba(183,164,227,0.65); box-shadow:0 0 28px rgba(183,164,227,0.14),var(--shadow-soft); }
@@ -259,7 +270,7 @@
     .node-muspellsheimr { border-color:rgba(200,80,50,0.28); }
     .node-muspellsheimr:hover { border-color:rgba(220,100,60,0.55); box-shadow:0 0 28px rgba(200,80,50,0.14),var(--shadow-soft); }
  
-    /* Staggered animation delays for visible cards only */
+    /* Staggered animation delays */
     .pos-r1-c2 .node-card { animation-delay:0.05s; }
     .pos-r2-c1 .node-card { animation-delay:0.12s; }
     .pos-r2-c2 .node-card { animation-delay:0.18s; }
@@ -276,11 +287,7 @@
       line-height: 1.2; margin-bottom: 0.15rem;
       display: flex; align-items: center; gap: 0.45rem;
     }
- 
-    .node-dot {
-      display: inline-block; width:6px; height:6px;
-      border-radius:50%; flex-shrink:0;
-    }
+    .node-dot { display:inline-block; width:6px; height:6px; border-radius:50%; flex-shrink:0; }
     .dot-violet { background:#b7a4e3; box-shadow:0 0 7px rgba(183,164,227,0.7); }
     .dot-ice    { background:#7ab8d4; box-shadow:0 0 7px rgba(122,184,212,0.7); }
     .dot-moss   { background:#537544; box-shadow:0 0 7px rgba(83,117,68,0.8); }
@@ -305,6 +312,7 @@
     .node-content-area p:last-child { margin-bottom:0; }
  
     .wyrd-footer {
+      position: relative; z-index: 1;
       text-align:center; padding:2rem 0 3rem;
       font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase;
       color:var(--text-muted); opacity:0.28;
@@ -319,11 +327,131 @@
       }
       .pos-r1-c1,.pos-r1-c3,.pos-r3-c1,.pos-r3-c3,.pos-r5-c1,.pos-r5-c3 { display:none; }
       .node-card { width:min(320px,100%); }
-      #wowSvg { display:none; }
+      .wow-bg { display: none; }
     }
   </style>
 </head>
 <body>
+ 
+<!-- WEB OF WYRD BACKGROUND SIGIL -->
+<div class="wow-bg" id="wowBg" aria-hidden="true">
+  <svg id="wowSigil" xmlns="http://www.w3.org/2000/svg"
+       viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <filter id="sigil-glow">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="0.6" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="sigil-glow-outer">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="1.4" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+ 
+    <!--
+      Web of Wyrd in a 100×100 coordinate space.
+      3 verticals at x = 20, 50, 80
+      3 horizontals at y = 20, 50, 80
+      Diagonals through every cell: (20,20)↔(80,80), (20,80)↔(80,20)
+      and the inner X crosses: (20,20)↔(50,50), (50,50)↔(80,80),
+      (20,80)↔(50,50), (50,50)↔(80,20) etc.
+      Lines extend 8 units past the grid edges for runic overshoot.
+    -->
+ 
+    <!-- Outer diffuse glow layer (widest blur) -->
+    <g filter="url(#sigil-glow-outer)" opacity="0.18">
+      <!-- 3 verticals -->
+      <line x1="20" y1="8"  x2="20" y2="92" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="50" y1="8"  x2="50" y2="92" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="80" y1="8"  x2="80" y2="92" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- 3 horizontals -->
+      <line x1="8"  y1="20" x2="92" y2="20" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="8"  y1="50" x2="92" y2="50" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="8"  y1="80" x2="92" y2="80" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- Full corner-to-corner diagonals -->
+      <line x1="12" y1="12" x2="88" y2="88" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="88" y1="12" x2="12" y2="88" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- Inner cell diagonals — top-left cell -->
+      <line x1="12" y1="12" x2="50" y2="50" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="20" y1="12" x2="12" y2="20" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="50" y1="12" x2="12" y2="50" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- top-right cell -->
+      <line x1="88" y1="12" x2="50" y2="50" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="80" y1="12" x2="88" y2="20" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="50" y1="12" x2="88" y2="50" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- bottom-left cell -->
+      <line x1="12" y1="88" x2="50" y2="50" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="20" y1="88" x2="12" y2="80" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="50" y1="88" x2="12" y2="50" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- bottom-right cell -->
+      <line x1="88" y1="88" x2="50" y2="50" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="80" y1="88" x2="88" y2="80" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="50" y1="88" x2="88" y2="50" stroke="#b7a4e3" stroke-width="1.2" stroke-linecap="round"/>
+    </g>
+ 
+    <!-- Mid glow layer -->
+    <g filter="url(#sigil-glow)" opacity="0.22">
+      <line x1="20" y1="8"  x2="20" y2="92" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+      <line x1="50" y1="8"  x2="50" y2="92" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+      <line x1="80" y1="8"  x2="80" y2="92" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+      <line x1="8"  y1="20" x2="92" y2="20" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+      <line x1="8"  y1="50" x2="92" y2="50" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+      <line x1="8"  y1="80" x2="92" y2="80" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+      <line x1="12" y1="12" x2="88" y2="88" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+      <line x1="88" y1="12" x2="12" y2="88" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+      <line x1="12" y1="12" x2="50" y2="50" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+      <line x1="20" y1="12" x2="12" y2="20" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+      <line x1="50" y1="12" x2="12" y2="50" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+      <line x1="88" y1="12" x2="50" y2="50" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+      <line x1="80" y1="12" x2="88" y2="20" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+      <line x1="50" y1="12" x2="88" y2="50" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+      <line x1="12" y1="88" x2="50" y2="50" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+      <line x1="20" y1="88" x2="12" y2="80" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+      <line x1="50" y1="88" x2="12" y2="50" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+      <line x1="88" y1="88" x2="50" y2="50" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+      <line x1="80" y1="88" x2="88" y2="80" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+      <line x1="50" y1="88" x2="88" y2="50" stroke="#c4b8ee" stroke-width="0.6" stroke-linecap="round"/>
+    </g>
+ 
+    <!-- Sharp crisp core lines -->
+    <g opacity="0.28">
+      <line x1="20" y1="8"  x2="20" y2="92" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+      <line x1="50" y1="8"  x2="50" y2="92" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+      <line x1="80" y1="8"  x2="80" y2="92" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+      <line x1="8"  y1="20" x2="92" y2="20" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+      <line x1="8"  y1="50" x2="92" y2="50" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+      <line x1="8"  y1="80" x2="92" y2="80" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+      <line x1="12" y1="12" x2="88" y2="88" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+      <line x1="88" y1="12" x2="12" y2="88" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+      <line x1="12" y1="12" x2="50" y2="50" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+      <line x1="20" y1="12" x2="12" y2="20" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+      <line x1="50" y1="12" x2="12" y2="50" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+      <line x1="88" y1="12" x2="50" y2="50" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+      <line x1="80" y1="12" x2="88" y2="20" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+      <line x1="50" y1="12" x2="88" y2="50" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+      <line x1="12" y1="88" x2="50" y2="50" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+      <line x1="20" y1="88" x2="12" y2="80" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+      <line x1="50" y1="88" x2="12" y2="50" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+      <line x1="88" y1="88" x2="50" y2="50" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+      <line x1="80" y1="88" x2="88" y2="80" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+      <line x1="50" y1="88" x2="88" y2="50" stroke="#ddd4f5" stroke-width="0.18" stroke-linecap="round"/>
+    </g>
+ 
+    <!-- Intersection dots — glow at each of the 9 grid crossings -->
+    <g opacity="0.35">
+      <circle cx="20" cy="20" r="0.7" fill="#b7a4e3" filter="url(#sigil-glow)"/>
+      <circle cx="50" cy="20" r="0.7" fill="#b7a4e3" filter="url(#sigil-glow)"/>
+      <circle cx="80" cy="20" r="0.7" fill="#b7a4e3" filter="url(#sigil-glow)"/>
+      <circle cx="20" cy="50" r="0.7" fill="#b7a4e3" filter="url(#sigil-glow)"/>
+      <circle cx="50" cy="50" r="1.0" fill="#c4b8ee" filter="url(#sigil-glow)"/>
+      <circle cx="80" cy="50" r="0.7" fill="#b7a4e3" filter="url(#sigil-glow)"/>
+      <circle cx="20" cy="80" r="0.7" fill="#b7a4e3" filter="url(#sigil-glow)"/>
+      <circle cx="50" cy="80" r="0.7" fill="#b7a4e3" filter="url(#sigil-glow)"/>
+      <circle cx="80" cy="80" r="0.7" fill="#b7a4e3" filter="url(#sigil-glow)"/>
+    </g>
+ 
+  </svg>
+</div>
  
 <!-- GATE -->
 <div id="gateWall">
@@ -353,12 +481,8 @@
  
     <div class="wow-grid" id="wowGrid">
  
-      <svg id="wowSvg" aria-hidden="true"></svg>
- 
-      <!-- ROW 1: Ásgarður only (spacers hold column width) -->
-      <div class="wow-card-wrap pos-r1-c1" aria-hidden="true">
-        <div class="node-card node-asgardr" style="visibility:hidden"></div>
-      </div>
+      <!-- ROW 1: Ásgarður only -->
+      <div class="wow-card-wrap pos-r1-c1" aria-hidden="true"><div class="node-card node-asgardr" style="visibility:hidden"></div></div>
       <div class="wow-card-wrap pos-r1-c2">
         <div class="node-card node-asgardr">
           <div class="node-realm"><span class="node-dot dot-violet"></span>Ásgarður</div>
@@ -367,9 +491,7 @@
           <div class="node-content-area"><p>Add your writing here.</p></div>
         </div>
       </div>
-      <div class="wow-card-wrap pos-r1-c3" aria-hidden="true">
-        <div class="node-card node-asgardr" style="visibility:hidden"></div>
-      </div>
+      <div class="wow-card-wrap pos-r1-c3" aria-hidden="true"><div class="node-card node-asgardr" style="visibility:hidden"></div></div>
  
       <!-- ROW 2: Niflheimur | Álfheimur | Jötunheimur -->
       <div class="wow-card-wrap pos-r2-c1">
@@ -398,9 +520,7 @@
       </div>
  
       <!-- ROW 3: Miðgarður only -->
-      <div class="wow-card-wrap pos-r3-c1" aria-hidden="true">
-        <div class="node-card node-midgardr" style="visibility:hidden"></div>
-      </div>
+      <div class="wow-card-wrap pos-r3-c1" aria-hidden="true"><div class="node-card node-midgardr" style="visibility:hidden"></div></div>
       <div class="wow-card-wrap pos-r3-c2">
         <div class="node-card node-midgardr">
           <div class="node-realm"><span class="node-dot dot-moss"></span>Miðgarður</div>
@@ -409,9 +529,7 @@
           <div class="node-content-area"><p>Add your writing here.</p></div>
         </div>
       </div>
-      <div class="wow-card-wrap pos-r3-c3" aria-hidden="true">
-        <div class="node-card node-midgardr" style="visibility:hidden"></div>
-      </div>
+      <div class="wow-card-wrap pos-r3-c3" aria-hidden="true"><div class="node-card node-midgardr" style="visibility:hidden"></div></div>
  
       <!-- ROW 4: Dvergheimur | Svartálfaheimur | Múspellsheimur -->
       <div class="wow-card-wrap pos-r4-c1">
@@ -440,9 +558,7 @@
       </div>
  
       <!-- ROW 5: Hel only -->
-      <div class="wow-card-wrap pos-r5-c1" aria-hidden="true">
-        <div class="node-card node-hel" style="visibility:hidden"></div>
-      </div>
+      <div class="wow-card-wrap pos-r5-c1" aria-hidden="true"><div class="node-card node-hel" style="visibility:hidden"></div></div>
       <div class="wow-card-wrap pos-r5-c2">
         <div class="node-card node-hel">
           <div class="node-realm"><span class="node-dot dot-ember"></span>Hel</div>
@@ -451,9 +567,7 @@
           <div class="node-content-area"><p>Add your writing here.</p></div>
         </div>
       </div>
-      <div class="wow-card-wrap pos-r5-c3" aria-hidden="true">
-        <div class="node-card node-hel" style="visibility:hidden"></div>
-      </div>
+      <div class="wow-card-wrap pos-r5-c3" aria-hidden="true"><div class="node-card node-hel" style="visibility:hidden"></div></div>
  
     </div>
   </main>
@@ -469,10 +583,27 @@
   const error   = document.getElementById('gateError');
   const content = document.getElementById('secretContent');
  
+  // Size the sigil SVG to match full page height
+  function sizeSigil() {
+    const sigil = document.getElementById('wowSigil');
+    const bg    = document.getElementById('wowBg');
+    if (!sigil || !bg) return;
+    const h = document.body.scrollHeight;
+    const w = bg.offsetWidth;
+    // Keep it square (Web of Wyrd is square) but tall enough to fill page
+    // We use preserveAspectRatio=xMidYMid meet so it fits inside —
+    // instead, stretch to fill width and let height be proportional
+    sigil.style.width  = '100%';
+    sigil.style.height = h + 'px';
+    // Override preserveAspectRatio to stretch and fill
+    sigil.setAttribute('preserveAspectRatio', 'none');
+    bg.style.height = h + 'px';
+  }
+ 
   if (sessionStorage.getItem('wyrd_auth') === '1') {
     wall.remove();
     content.classList.add('revealed');
-    setTimeout(drawWow, 400);
+    setTimeout(sizeSigil, 100);
   }
  
   input.addEventListener('keydown', function(e) {
@@ -484,7 +615,7 @@
       setTimeout(() => {
         wall.remove();
         content.classList.add('revealed');
-        setTimeout(drawWow, 500);
+        setTimeout(sizeSigil, 300);
       }, 800);
     } else {
       error.textContent = 'the threshold does not open';
@@ -494,140 +625,10 @@
     }
   });
  
-  function drawWow() {
-    const grid  = document.getElementById('wowGrid');
-    const svg   = document.getElementById('wowSvg');
-    const gRect = grid.getBoundingClientRect();
- 
-    svg.innerHTML = '';
-    svg.setAttribute('viewBox', `0 0 ${gRect.width} ${gRect.height}`);
- 
-    // Get bounding box of a visible node card
-    function pos(sel) {
-      const wrap = grid.querySelector(sel);
-      if (!wrap) return null;
-      // find the visible card (not a spacer)
-      const card = wrap.querySelector('.node-card');
-      if (!card) return null;
-      const r = card.getBoundingClientRect();
-      return {
-        x: r.left - gRect.left + r.width  / 2,
-        y: r.top  - gRect.top  + r.height / 2,
-        t: r.top    - gRect.top,
-        b: r.bottom - gRect.top,
-        l: r.left   - gRect.left,
-        r: r.right  - gRect.left,
-      };
-    }
- 
-    // All 9 nodes
-    const asg  = pos('.pos-r1-c2');
-    const nifl = pos('.pos-r2-c1');
-    const alf  = pos('.pos-r2-c2');
-    const jot  = pos('.pos-r2-c3');
-    const mid  = pos('.pos-r3-c2');
-    const dve  = pos('.pos-r4-c1');
-    const sva  = pos('.pos-r4-c2');
-    const mus  = pos('.pos-r4-c3');
-    const hel  = pos('.pos-r5-c2');
- 
-    if (!asg || !nifl || !alf || !jot || !mid || !dve || !sva || !mus || !hel) return;
- 
-    // Per-line colors: glow + crisp core
-    const C = {
-      spine:  { glow:'rgba(183,164,227,0.45)', line:'rgba(210,195,245,0.88)' },
-      nifl:   { glow:'rgba(100,140,180,0.4)',  line:'rgba(130,170,210,0.82)' },
-      jot:    { glow:'rgba(201,168,76,0.4)',   line:'rgba(225,190,95,0.82)'  },
-      dve:    { glow:'rgba(130,120,100,0.38)', line:'rgba(165,152,125,0.78)' },
-      mus:    { glow:'rgba(200,80,50,0.4)',    line:'rgba(230,105,65,0.82)'  },
-      h_mid:  { glow:'rgba(155,175,160,0.38)', line:'rgba(185,205,190,0.78)' },
-    };
- 
-    const EXT = 10; // runic overshoot
- 
-    function stroke(x1, y1, x2, y2, col, ext) {
-      if (ext) {
-        const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy)||1;
-        x1-=(dx/len)*ext; y1-=(dy/len)*ext;
-        x2+=(dx/len)*ext; y2+=(dy/len)*ext;
-      }
-      // slight organic bow
-      const mx=(x1+x2)/2+(y2-y1)*0.025;
-      const my=(y1+y2)/2+(x1-x2)*0.018;
-      const d=`M${x1.toFixed(1)} ${y1.toFixed(1)} Q${mx.toFixed(1)} ${my.toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}`;
- 
-      const p1=document.createElementNS('http://www.w3.org/2000/svg','path');
-      p1.setAttribute('d',d); p1.setAttribute('fill','none');
-      p1.setAttribute('stroke',col.glow); p1.setAttribute('stroke-width','7');
-      p1.setAttribute('stroke-linecap','round'); p1.style.filter='blur(7px)';
-      svg.appendChild(p1);
- 
-      const p2=document.createElementNS('http://www.w3.org/2000/svg','path');
-      p2.setAttribute('d',d); p2.setAttribute('fill','none');
-      p2.setAttribute('stroke',col.glow); p2.setAttribute('stroke-width','2.5');
-      p2.setAttribute('stroke-linecap','round'); p2.style.filter='blur(2px)';
-      svg.appendChild(p2);
- 
-      const p3=document.createElementNS('http://www.w3.org/2000/svg','path');
-      p3.setAttribute('d',d); p3.setAttribute('fill','none');
-      p3.setAttribute('stroke',col.line); p3.setAttribute('stroke-width','0.8');
-      p3.setAttribute('stroke-linecap','round');
-      svg.appendChild(p3);
-    }
- 
-    // ── 3 VERTICALS ──
-    // Left:   Niflheimur → Dvergheimur
-    stroke(nifl.x, nifl.b, dve.x,  dve.t,  C.nifl,  EXT);
-    // Centre: Ásgarður → Álfheimur → Miðgarður → Svartálfaheimur → Hel
-    stroke(asg.x,  asg.b,  alf.x,  alf.t,  C.spine, EXT);
-    stroke(alf.x,  alf.b,  mid.x,  mid.t,  C.spine, EXT);
-    stroke(mid.x,  mid.b,  sva.x,  sva.t,  C.spine, EXT);
-    stroke(sva.x,  sva.b,  hel.x,  hel.t,  C.spine, EXT);
-    // Right:  Jötunheimur → Múspellsheimur
-    stroke(jot.x,  jot.b,  mus.x,  mus.t,  C.jot,   EXT);
- 
-    // ── 3 HORIZONTALS ──
-    // Row 2: Niflheimur — Álfheimur — Jötunheimur
-    stroke(nifl.r, nifl.y, alf.l,  alf.y,  C.nifl,  EXT);
-    stroke(alf.r,  alf.y,  jot.l,  jot.y,  C.jot,   EXT);
-    // Row 4: Dvergheimur — Svartálfaheimur — Múspellsheimur
-    stroke(dve.r,  dve.y,  sva.l,  sva.y,  C.dve,   EXT);
-    stroke(sva.r,  sva.y,  mus.l,  mus.y,  C.mus,   EXT);
-    // Row 3 mid-horizontal: Niflheimur col ↔ Miðgarður ↔ Jötunheimur col (implied Web line)
-    stroke(nifl.x, mid.y,  alf.l,  mid.y,  C.h_mid, EXT);
-    stroke(alf.r,  mid.y,  jot.x,  mid.y,  C.h_mid, EXT);
- 
-    // ── DIAGONALS (Web of Wyrd X pattern) ──
-    // Top X through Álfheimur (row 2 center)
-    stroke(nifl.r, nifl.t, jot.l,  jot.t,  C.h_mid, EXT); // top horizontal of row 2
-    stroke(nifl.r, nifl.b, jot.l,  jot.b,  C.h_mid, EXT); // bottom horizontal of row 2
-    stroke(nifl.r, nifl.t, alf.x,  alf.b,  C.nifl,  0);   // nifl → bottom of alf
-    stroke(jot.l,  jot.t,  alf.x,  alf.b,  C.jot,   0);   // jot  → bottom of alf
-    stroke(nifl.r, nifl.b, alf.x,  alf.t,  C.nifl,  0);   // nifl → top of alf
-    stroke(jot.l,  jot.b,  alf.x,  alf.t,  C.jot,   0);   // jot  → top of alf
- 
-    // Bottom X through Svartálfaheimur (row 4 center)
-    stroke(dve.r,  dve.t,  mus.l,  mus.t,  C.h_mid, EXT); // top horizontal of row 4
-    stroke(dve.r,  dve.b,  mus.l,  mus.b,  C.h_mid, EXT); // bottom horizontal of row 4
-    stroke(dve.r,  dve.t,  sva.x,  sva.b,  C.dve,   0);   // dve  → bottom of sva
-    stroke(mus.l,  mus.t,  sva.x,  sva.b,  C.mus,   0);   // mus  → bottom of sva
-    stroke(dve.r,  dve.b,  sva.x,  sva.t,  C.dve,   0);   // dve  → top of sva
-    stroke(mus.l,  mus.b,  sva.x,  sva.t,  C.mus,   0);   // mus  → top of sva
- 
-    // Long sweeping diagonals: top node (Ásgarður) to bottom corners
-    stroke(asg.l,  asg.b,  dve.r,  dve.t,  C.spine, 0);
-    stroke(asg.r,  asg.b,  mus.l,  mus.t,  C.spine, 0);
-    // Long sweeping diagonals: bottom node (Hel) to top corners
-    stroke(hel.l,  hel.t,  nifl.r, nifl.b, C.spine, 0);
-    stroke(hel.r,  hel.t,  jot.l,  jot.b,  C.spine, 0);
-  }
- 
   let rTimer;
   window.addEventListener('resize', () => {
     clearTimeout(rTimer);
-    rTimer = setTimeout(() => {
-      if (content.classList.contains('revealed')) drawWow();
-    }, 150);
+    rTimer = setTimeout(sizeSigil, 150);
   });
 </script>
  
