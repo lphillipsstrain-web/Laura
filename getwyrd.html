@@ -8,11 +8,517 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root {
+      --bg: #020305;
+      --bg-alt: #05060a;
+      --panel: #0b0c10;
+      --panel-soft: #12141a;
+      --border-subtle: rgba(150, 158, 170, 0.25);
+      --accent-amber: #cdd5e0;
+      --accent-moss: #537544;
+      --accent-violet: #b7a4e3;
+      --accent-gold: #c9a84c;
+      --accent-ice: #7ab8d4;
+      --accent-ember: #c4614a;
+      --text-main: #eceff3;
+      --text-muted: #98a2b3;
+      --shadow-soft: 0 20px 48px rgba(0,0,0,0.7);
+      --font-display: "DM Serif Display", serif;
+      --font-body: "Space Grotesk", sans-serif;
+      --radius-sm: 6px;
+      --radius-md: 12px;
+    }
+ 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    html { scroll-behavior: smooth; }
+ 
+    body {
+      background:
+        radial-gradient(circle at top left, #0b1220 0, transparent 55%),
+        radial-gradient(circle at bottom right, #020617 0, transparent 55%),
+        var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+ 
+    /* ===== GATE ===== */
+    .gate-body-bg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+ 
+    #gateWall {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      background:
+        radial-gradient(circle at top left, #0b1220 0, transparent 55%),
+        radial-gradient(circle at bottom right, #020617 0, transparent 55%),
+        #020305;
+      transition: opacity 0.8s ease;
+    }
+ 
+    .gate-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.4rem;
+      padding: 3.5rem 3rem;
+      background: rgba(11, 12, 16, 0.95);
+      border: 1px solid rgba(183, 164, 227, 0.2);
+      border-radius: var(--radius-md);
+      box-shadow:
+        0 0 60px rgba(183, 164, 227, 0.06),
+        0 32px 80px rgba(0,0,0,0.8);
+      min-width: 300px;
+      position: relative;
+    }
+ 
+    .gate-box::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: calc(var(--radius-md) + 1px);
+      background: linear-gradient(135deg, rgba(183,164,227,0.15), transparent 50%, rgba(83,117,68,0.1));
+      pointer-events: none;
+    }
+ 
+    .gate-rune {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      color: var(--accent-violet);
+      line-height: 1;
+      animation: gate-pulse 4s ease-in-out infinite;
+      letter-spacing: 0.1em;
+    }
+ 
+    @keyframes gate-pulse {
+      0%, 100% { opacity: 0.5; text-shadow: 0 0 20px rgba(183,164,227,0.3); }
+      50%       { opacity: 1;   text-shadow: 0 0 40px rgba(183,164,227,0.7), 0 0 80px rgba(183,164,227,0.3); }
+    }
+ 
+    .gate-prompt {
+      font-size: 0.72rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+ 
+    .gate-input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(183, 164, 227, 0.3);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      letter-spacing: 0.4em;
+      text-align: center;
+      padding: 0.5rem 0.5rem;
+      width: 200px;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+ 
+    .gate-input:focus {
+      border-bottom-color: var(--accent-violet);
+      box-shadow: 0 4px 12px rgba(183,164,227,0.1);
+    }
+ 
+    .gate-hint {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      color: rgba(152,162,179,0.5);
+    }
+ 
+    .gate-error {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      color: #c4614a;
+      min-height: 1em;
+      text-transform: lowercase;
+    }
+ 
+    @keyframes gate-shake {
+      0%,100% { transform: translateX(0); }
+      20%      { transform: translateX(-7px); }
+      40%      { transform: translateX(7px); }
+      60%      { transform: translateX(-5px); }
+      80%      { transform: translateX(5px); }
+    }
+ 
+    .gate-shake { animation: gate-shake 0.45s ease; }
+ 
+    /* ===== SECRET PAGE ===== */
+    #secretContent { display: none; }
+    #secretContent.revealed { display: block; }
+ 
+    /* Header */
+    .wyrd-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(16px);
+      background: linear-gradient(to bottom, rgba(2,3,5,0.97), rgba(2,3,5,0.88));
+      border-bottom: 1px solid rgba(183,164,227,0.15);
+      padding: 0.75rem 0;
+    }
+ 
+    .wyrd-header-inner {
+      width: min(1200px, 100% - 2rem);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+ 
+    .wyrd-wordmark {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--accent-violet);
+      text-decoration: none;
+      opacity: 0.7;
+    }
+ 
+    .wyrd-back {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+ 
+    .wyrd-back:hover { opacity: 1; color: var(--accent-violet); }
+ 
+    /* ===== TREE LAYOUT ===== */
+    .tree-page {
+      width: min(1300px, 100% - 2rem);
+      margin: 0 auto;
+      padding: 4rem 0 6rem;
+    }
+ 
+    .tree-title {
+      text-align: center;
+      margin-bottom: 0.5rem;
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      color: var(--accent-violet);
+      opacity: 0.6;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+    }
+ 
+    .tree-subtitle {
+      text-align: center;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      opacity: 0.4;
+      margin-bottom: 3rem;
+    }
+ 
+    /* The main tree container — CSS Grid */
+    .tree-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      grid-template-rows: auto auto auto auto auto auto auto;
+      gap: 0;
+      align-items: center;
+      position: relative;
+    }
+ 
+    /* SVG connector layer — sits behind everything */
+    .tree-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+ 
+    /* Spine nodes */
+    .spine-node {
+      grid-column: 2;
+      justify-self: center;
+      position: relative;
+      z-index: 2;
+    }
+ 
+    /* Corner nodes */
+    .corner-ul { grid-column: 1; grid-row: 1; justify-self: start; position: relative; z-index: 2; }
+    .corner-ur { grid-column: 3; grid-row: 1; justify-self: end;   position: relative; z-index: 2; }
+    .corner-ll { grid-column: 1; grid-row: 7; justify-self: start; position: relative; z-index: 2; }
+    .corner-lr { grid-column: 3; grid-row: 7; justify-self: end;   position: relative; z-index: 2; }
+ 
+    /* Spacers to push corners to correct rows */
+    .spine-1 { grid-row: 2; }
+    .spine-2 { grid-row: 3; }
+    .spine-3 { grid-row: 4; }
+    .spine-4 { grid-row: 5; }
+    .spine-5 { grid-row: 6; }
+ 
+    /* Row spacers between spine nodes */
+    .row-gap {
+      grid-column: 2;
+      height: 60px;
+    }
+    .row-gap-1 { grid-row: 1; }
+    .row-gap-between-1-2 { grid-row: 2; display: none; } /* handled by margin */
+ 
+    /* ===== NODE CARD ===== */
+    .node-card {
+      background: var(--panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.4rem 1.6rem;
+      width: 240px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+ 
+    .node-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      border-radius: var(--radius-md);
+    }
+ 
+    .node-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-soft);
+    }
+ 
+    /* Spine node — slightly wider */
+    .spine-node .node-card {
+      width: 260px;
+    }
+ 
+    /* Node accent colors */
+    .node-asgardr {
+      border-color: rgba(183,164,227,0.35);
+    }
+    .node-asgardr::before {
+      background: radial-gradient(circle at top, rgba(183,164,227,0.08), transparent 70%);
+    }
+    .node-asgardr:hover { border-color: rgba(183,164,227,0.6); box-shadow: 0 0 30px rgba(183,164,227,0.12), var(--shadow-soft); }
+ 
+    .node-alfheimr {
+      border-color: rgba(122,184,212,0.3);
+    }
+    .node-alfheimr::before {
+      background: radial-gradient(circle at top, rgba(122,184,212,0.07), transparent 70%);
+    }
+    .node-alfheimr:hover { border-color: rgba(122,184,212,0.5); box-shadow: 0 0 30px rgba(122,184,212,0.1), var(--shadow-soft); }
+ 
+    .node-midgardr {
+      border-color: rgba(83,117,68,0.4);
+    }
+    .node-midgardr::before {
+      background: radial-gradient(circle at center, rgba(83,117,68,0.1), transparent 70%);
+    }
+    .node-midgardr:hover { border-color: rgba(83,117,68,0.7); box-shadow: 0 0 30px rgba(83,117,68,0.15), var(--shadow-soft); }
+ 
+    .node-svartalfheimr {
+      border-color: rgba(150,120,80,0.3);
+    }
+    .node-svartalfheimr::before {
+      background: radial-gradient(circle at bottom, rgba(150,120,80,0.07), transparent 70%);
+    }
+    .node-svartalfheimr:hover { border-color: rgba(150,120,80,0.5); box-shadow: 0 0 30px rgba(150,120,80,0.1), var(--shadow-soft); }
+ 
+    .node-hel {
+      border-color: rgba(196,97,74,0.25);
+    }
+    .node-hel::before {
+      background: radial-gradient(circle at bottom, rgba(196,97,74,0.08), transparent 70%);
+    }
+    .node-hel:hover { border-color: rgba(196,97,74,0.5); box-shadow: 0 0 30px rgba(196,97,74,0.12), var(--shadow-soft); }
+ 
+    .node-niflheimr {
+      border-color: rgba(100,140,180,0.25);
+    }
+    .node-niflheimr:hover { border-color: rgba(100,140,180,0.5); box-shadow: 0 0 30px rgba(100,140,180,0.1), var(--shadow-soft); }
+ 
+    .node-jotunheimr {
+      border-color: rgba(180,140,60,0.25);
+    }
+    .node-jotunheimr:hover { border-color: rgba(180,140,60,0.5); box-shadow: 0 0 30px rgba(180,140,60,0.1), var(--shadow-soft); }
+ 
+    .node-dvergheimr {
+      border-color: rgba(120,110,100,0.3);
+    }
+    .node-dvergheimr:hover { border-color: rgba(160,150,130,0.5); box-shadow: 0 0 30px rgba(140,130,100,0.1), var(--shadow-soft); }
+ 
+    .node-muspellsheimr {
+      border-color: rgba(200,80,50,0.25);
+    }
+    .node-muspellsheimr:hover { border-color: rgba(220,100,60,0.5); box-shadow: 0 0 30px rgba(200,80,50,0.12), var(--shadow-soft); }
+ 
+    /* Hover activates ::before */
+    .node-card:hover::before { opacity: 1; }
+ 
+    /* Node typography */
+    .node-realm {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      line-height: 1.2;
+      margin-bottom: 0.2rem;
+      letter-spacing: 0.02em;
+    }
+ 
+    .node-realm-en {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      opacity: 0.5;
+      margin-bottom: 0.6rem;
+    }
+ 
+    .node-essence {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 0.9rem;
+    }
+ 
+    .node-content-area {
+      min-height: 60px;
+      font-size: 0.82rem;
+      color: rgba(152,162,179,0.6);
+      line-height: 1.6;
+      font-style: italic;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 0.8rem;
+    }
+ 
+    .node-content-area p { margin-bottom: 0.5rem; }
+    .node-content-area p:last-child { margin-bottom: 0; }
+ 
+    /* Accent dot */
+    .node-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+ 
+    .dot-violet  { background: var(--accent-violet); box-shadow: 0 0 8px rgba(183,164,227,0.6); }
+    .dot-ice     { background: var(--accent-ice);    box-shadow: 0 0 8px rgba(122,184,212,0.6); }
+    .dot-moss    { background: var(--accent-moss);   box-shadow: 0 0 8px rgba(83,117,68,0.7); }
+    .dot-earth   { background: #a07850;              box-shadow: 0 0 8px rgba(150,120,80,0.6); }
+    .dot-ember   { background: var(--accent-ember);  box-shadow: 0 0 8px rgba(196,97,74,0.6); }
+    .dot-mist    { background: #6488aa;              box-shadow: 0 0 8px rgba(100,140,180,0.5); }
+    .dot-gold    { background: var(--accent-gold);   box-shadow: 0 0 8px rgba(201,168,76,0.6); }
+    .dot-stone   { background: #888070;              box-shadow: 0 0 8px rgba(130,120,100,0.5); }
+    .dot-fire    { background: #d4502a;              box-shadow: 0 0 8px rgba(200,80,50,0.7); }
+ 
+    /* ===== CONNECTOR SVG ===== */
+    #treeConnectors {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      overflow: visible;
+      z-index: 1;
+    }
+ 
+    /* ===== SPACING BETWEEN SPINE NODES ===== */
+    .spine-gap {
+      grid-column: 2;
+      height: 32px;
+    }
+ 
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .tree-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+      }
+ 
+      .corner-ul, .corner-ur, .corner-ll, .corner-lr,
+      .spine-1, .spine-2, .spine-3, .spine-4, .spine-5 {
+        grid-column: 1;
+        grid-row: auto;
+        justify-self: center;
+      }
+ 
+      .node-card, .spine-node .node-card {
+        width: min(320px, 100%);
+        margin: 0 auto;
+      }
+ 
+      #treeConnectors { display: none; }
+ 
+      .tree-grid > * {
+        margin-bottom: 1.5rem;
+      }
+ 
+      /* Add labels for mobile to indicate realm positions */
+      .corner-ul::before { content: "upper left"; }
+      .corner-ur::before { content: "upper right"; }
+    }
+ 
+    /* ===== FADE IN ANIMATION ===== */
+    .node-card {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: node-appear 0.6s ease forwards;
+    }
+ 
+    @keyframes node-appear {
+      to { opacity: 1; transform: translateY(0); }
+    }
+ 
+    .spine-node:nth-child(1) .node-card  { animation-delay: 0.1s; }
+    .corner-ul .node-card                { animation-delay: 0.2s; }
+    .corner-ur .node-card                { animation-delay: 0.2s; }
+    .spine-node:nth-child(3) .node-card  { animation-delay: 0.3s; }
+    .spine-node:nth-child(4) .node-card  { animation-delay: 0.4s; }
+    .spine-node:nth-child(5) .node-card  { animation-delay: 0.5s; }
+    .spine-node:nth-child(6) .node-card  { animation-delay: 0.6s; }
+    .spine-node:nth-child(7) .node-card  { animation-delay: 0.7s; }
+    .corner-ll .node-card                { animation-delay: 0.8s; }
+    .corner-lr .node-card                { animation-delay: 0.8s; }
+ 
+    /* ===== FOOTER ===== */
+    .wyrd-footer {
+      text-align: center;
+      padding: 2rem 0 3rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      opacity: 0.3;
+    }
+  </style>
 </head>
-<body class="gate-body">
-
-  <div id="gateWall" class="gate-wall">
+<body>
+ 
+  <!-- GATE WALL -->
+  <div id="gateWall">
     <div class="gate-box">
       <div class="gate-rune">⟁</div>
       <p class="gate-prompt">speak the word</p>
@@ -20,57 +526,299 @@
         type="password"
         id="gateInput"
         class="gate-input"
-        placeholder="···"
+        placeholder="· · ·"
         autocomplete="off"
         spellcheck="false"
+        autofocus
       />
+      <p class="gate-hint">press enter</p>
       <p id="gateError" class="gate-error" aria-live="polite"></p>
     </div>
   </div>
-
-  <main id="secretContent" class="secret-content" hidden>
-    <div class="shell">
-      <h1>The Hidden Room</h1>
-      <p class="text-muted">You found it. Add your content here.</p>
-
-      <!-- YOUR SECRET CONTENT GOES HERE -->
-
-    </div>
-  </main>
-
-<script>
-  const CORRECT = 'CelestialDelights'; // <-- change this
-
-  const wall = document.getElementById('gateWall');
-  const input = document.getElementById('gateInput');
-  const error = document.getElementById('gateError');
-  const content = document.getElementById('secretContent');
-
-  // Check if already authenticated this session
-  if (sessionStorage.getItem('wyrd_auth') === '1') {
-    wall.remove();
-    content.hidden = false;
-  }
-
-  input.addEventListener('keydown', function (e) {
-    if (e.key !== 'Enter') return;
-    const val = input.value.trim().toLowerCase();
-    if (val === CORRECT.toLowerCase()) {
-      sessionStorage.setItem('wyrd_auth', '1');
-      wall.style.opacity = '0';
-      wall.style.transition = 'opacity 0.6s ease';
-      setTimeout(() => {
-        wall.remove();
-        content.hidden = false;
-      }, 600);
-    } else {
-      error.textContent = 'the threshold does not open';
-      input.value = '';
-      input.classList.add('gate-shake');
-      setTimeout(() => input.classList.remove('gate-shake'), 500);
+ 
+  <!-- SECRET CONTENT -->
+  <div id="secretContent">
+ 
+    <header class="wyrd-header">
+      <div class="wyrd-header-inner">
+        <span class="wyrd-wordmark">The Nine Worlds</span>
+        <a href="index.html" class="wyrd-back">← return</a>
+      </div>
+    </header>
+ 
+    <main class="tree-page">
+      <p class="tree-title">Yggdrasil</p>
+      <p class="tree-subtitle">a personal cosmology</p>
+ 
+      <!-- Tree grid -->
+      <div class="tree-grid" id="treeGrid">
+ 
+        <!-- SVG connector layer (drawn by JS after layout) -->
+        <svg id="treeConnectors" aria-hidden="true"></svg>
+ 
+        <!-- CORNER: Upper Left — Niflheimur -->
+        <div class="corner-ul">
+          <div class="node-card node-niflheimr">
+            <div class="node-realm">
+              <span class="node-dot dot-mist"></span>Niflheimur
+            </div>
+            <div class="node-realm-en">The World of Mist</div>
+            <p class="node-essence">Instinctive thinking. The subconscious beneath the surface.</p>
+            <div class="node-content-area">
+              <p>Add your writing here.</p>
+            </div>
+          </div>
+        </div>
+ 
+        <!-- CORNER: Upper Right — Jötunheimur -->
+        <div class="corner-ur">
+          <div class="node-card node-jotunheimr">
+            <div class="node-realm">
+              <span class="node-dot dot-gold"></span>Jötunheimur
+            </div>
+            <div class="node-realm-en">The World of Giants</div>
+            <p class="node-essence">The adventure toward the goal. The unexpected and confusing.</p>
+            <div class="node-content-area">
+              <p>Add your writing here.</p>
+            </div>
+          </div>
+        </div>
+ 
+        <!-- SPINE 1: Ásgarður -->
+        <div class="spine-node spine-1">
+          <div class="node-card node-asgardr">
+            <div class="node-realm">
+              <span class="node-dot dot-violet"></span>Ásgarður
+            </div>
+            <div class="node-realm-en">The World of the Aesir</div>
+            <p class="node-essence">Main aspiration, creativity, expression, renewal.</p>
+            <div class="node-content-area">
+              <p>Add your writing here.</p>
+            </div>
+          </div>
+        </div>
+ 
+        <!-- SPINE 2: Álfheimur -->
+        <div class="spine-node spine-2">
+          <div class="node-card node-alfheimr">
+            <div class="node-realm">
+              <span class="node-dot dot-ice"></span>Álfheimur
+            </div>
+            <div class="node-realm-en">The World of the Light Elves</div>
+            <p class="node-essence">The conscious mind, dreams, and what lies ahead.</p>
+            <div class="node-content-area">
+              <p>Add your writing here.</p>
+            </div>
+          </div>
+        </div>
+ 
+        <!-- SPINE 3: Miðgarður (center) -->
+        <div class="spine-node spine-3">
+          <div class="node-card node-midgardr">
+            <div class="node-realm">
+              <span class="node-dot dot-moss"></span>Miðgarður
+            </div>
+            <div class="node-realm-en">The Middle World</div>
+            <p class="node-essence">Ego. Current position. Where I stand right now.</p>
+            <div class="node-content-area">
+              <p>Add your writing here.</p>
+            </div>
+          </div>
+        </div>
+ 
+        <!-- SPINE 4: Svartálfaheimur -->
+        <div class="spine-node spine-4">
+          <div class="node-card node-svartalfheimr">
+            <div class="node-realm">
+              <span class="node-dot dot-earth"></span>Svartálfaheimur
+            </div>
+            <div class="node-realm-en">The World of the Dark Elves</div>
+            <p class="node-essence">Past influence. The subconscious at work beneath.</p>
+            <div class="node-content-area">
+              <p>Add your writing here.</p>
+            </div>
+          </div>
+        </div>
+ 
+        <!-- SPINE 5: Hel -->
+        <div class="spine-node spine-5">
+          <div class="node-card node-hel">
+            <div class="node-realm">
+              <span class="node-dot dot-ember"></span>Hel
+            </div>
+            <div class="node-realm-en">The World of the Dead</div>
+            <p class="node-essence">Dark side. Obstacles standing between me and my aspirations.</p>
+            <div class="node-content-area">
+              <p>Add your writing here.</p>
+            </div>
+          </div>
+        </div>
+ 
+        <!-- CORNER: Lower Left — Dvergheimur -->
+        <div class="corner-ll">
+          <div class="node-card node-dvergheimr">
+            <div class="node-realm">
+              <span class="node-dot dot-stone"></span>Dvergheimur
+            </div>
+            <div class="node-realm-en">The World of the Dwarves</div>
+            <p class="node-essence">Industriousness, craftsmanship. Finance and career.</p>
+            <div class="node-content-area">
+              <p>Add your writing here.</p>
+            </div>
+          </div>
+        </div>
+ 
+        <!-- CORNER: Lower Right — Múspellsheimur -->
+        <div class="corner-lr">
+          <div class="node-card node-muspellsheimr">
+            <div class="node-realm">
+              <span class="node-dot dot-fire"></span>Múspellsheimur
+            </div>
+            <div class="node-realm-en">The World of Fire</div>
+            <p class="node-essence">Origin of catastrophe. Strength, wrath, and warning.</p>
+            <div class="node-content-area">
+              <p>Add your writing here.</p>
+            </div>
+          </div>
+        </div>
+ 
+      </div><!-- /tree-grid -->
+    </main>
+ 
+    <footer class="wyrd-footer">
+      <p>⟁ yggdrasil ⟁</p>
+    </footer>
+ 
+  </div><!-- /secretContent -->
+ 
+  <script>
+    // ===== GATE =====
+    const CORRECT = 'CelestialDelights'; // <-- change this
+ 
+    const wall      = document.getElementById('gateWall');
+    const input     = document.getElementById('gateInput');
+    const error     = document.getElementById('gateError');
+    const content   = document.getElementById('secretContent');
+ 
+    if (sessionStorage.getItem('wyrd_auth') === '1') {
+      wall.remove();
+      content.classList.add('revealed');
+      drawConnectors();
     }
-  });
-</script>
+ 
+    input.addEventListener('keydown', function(e) {
+      if (e.key !== 'Enter') return;
+      const val = input.value.trim().toLowerCase();
+      if (val === CORRECT.toLowerCase()) {
+        sessionStorage.setItem('wyrd_auth', '1');
+        wall.style.opacity = '0';
+        setTimeout(() => {
+          wall.remove();
+          content.classList.add('revealed');
+          setTimeout(drawConnectors, 400);
+        }, 800);
+      } else {
+        error.textContent = 'the threshold does not open';
+        input.value = '';
+        input.classList.add('gate-shake');
+        setTimeout(() => input.classList.remove('gate-shake'), 500);
+      }
+    });
+ 
+    // ===== SVG CONNECTORS =====
+    function drawConnectors() {
+      const grid  = document.getElementById('treeGrid');
+      const svg   = document.getElementById('treeConnectors');
+      const gRect = grid.getBoundingClientRect();
+ 
+      function center(el) {
+        const r = el.getBoundingClientRect();
+        return {
+          x: r.left - gRect.left + r.width / 2,
+          y: r.top  - gRect.top  + r.height / 2,
+          top:    r.top  - gRect.top,
+          bottom: r.bottom - gRect.top,
+          left:   r.left - gRect.left,
+          right:  r.right - gRect.left,
+        };
+      }
+ 
+      const ul = center(document.querySelector('.corner-ul .node-card'));
+      const ur = center(document.querySelector('.corner-ur .node-card'));
+      const ll = center(document.querySelector('.corner-ll .node-card'));
+      const lr = center(document.querySelector('.corner-lr .node-card'));
+      const s1 = center(document.querySelector('.spine-1 .node-card'));
+      const s2 = center(document.querySelector('.spine-2 .node-card'));
+      const s3 = center(document.querySelector('.spine-3 .node-card'));
+      const s4 = center(document.querySelector('.spine-4 .node-card'));
+      const s5 = center(document.querySelector('.spine-5 .node-card'));
+ 
+      svg.setAttribute('viewBox', `0 0 ${gRect.width} ${gRect.height}`);
+ 
+      // Colors for each connection
+      const colors = {
+        spine:    'rgba(183,164,227,0.18)',
+        nifl:     'rgba(100,140,180,0.25)',
+        jotun:    'rgba(201,168,76,0.22)',
+        dverg:    'rgba(130,120,100,0.22)',
+        musp:     'rgba(200,80,50,0.25)',
+      };
+ 
+      function glowLine(x1, y1, x2, y2, color, blur, width) {
+        const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+        // Blend of organic (slight curve) and geometric (mid-angle break)
+        const mx = (x1 + x2) / 2;
+        const my = (y1 + y2) / 2;
+        // slight organic curve via quadratic bezier with gentle offset
+        const ox = (y2 - y1) * 0.08;
+        const oy = (x1 - x2) * 0.06;
+        const d = `M ${x1} ${y1} Q ${mx + ox} ${my + oy}, ${x2} ${y2}`;
+        path.setAttribute('d', d);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', color);
+        path.setAttribute('stroke-width', width || 1);
+        path.setAttribute('opacity', '1');
+        if (blur) {
+          path.style.filter = `blur(${blur}px)`;
+        }
+        return path;
+      }
+ 
+      function addGlowPair(x1, y1, x2, y2, color) {
+        // Outer glow (blurred, wider)
+        svg.appendChild(glowLine(x1, y1, x2, y2, color, 3, 3));
+        // Inner crisp line
+        svg.appendChild(glowLine(x1, y1, x2, y2, color.replace(/[\d.]+\)$/, '0.7)'), 0, 0.5));
+      }
+ 
+      // Spine connections (top to bottom)
+      addGlowPair(s1.x, s1.bottom, s2.x, s2.top,   colors.spine);
+      addGlowPair(s2.x, s2.bottom, s3.x, s3.top,   colors.spine);
+      addGlowPair(s3.x, s3.bottom, s4.x, s4.top,   colors.spine);
+      addGlowPair(s4.x, s4.bottom, s5.x, s5.top,   colors.spine);
+ 
+      // Upper corners → spine top (Ásgarður)
+      addGlowPair(ul.right, ul.y,   s1.left, s1.y,  colors.nifl);
+      addGlowPair(ur.left,  ur.y,   s1.right, s1.y, colors.jotun);
+ 
+      // Lower corners → spine bottom (Hel)
+      addGlowPair(ll.right, ll.y,   s5.left, s5.y,  colors.dverg);
+      addGlowPair(lr.left,  lr.y,   s5.right, s5.y, colors.musp);
+    }
+ 
+    // Redraw on resize
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (document.getElementById('secretContent').classList.contains('revealed')) {
+          const svg = document.getElementById('treeConnectors');
+          while (svg.firstChild) svg.removeChild(svg.firstChild);
+          drawConnectors();
+        }
+      }, 150);
+    });
+  </script>
 
 </body>
 </html>
