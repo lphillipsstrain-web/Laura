@@ -700,11 +700,11 @@
     const error     = document.getElementById('gateError');
     const content   = document.getElementById('secretContent');
  
-    if (sessionStorage.getItem('wyrd_auth') === '1') {
-      wall.remove();
-      content.classList.add('revealed');
-      drawConnectors();
-    }
+  if (sessionStorage.getItem('wyrd_auth') === '1') {
+    wall.remove();
+    content.classList.add('revealed');
+    setTimeout(drawConnectors, 400);
+  }
  
     input.addEventListener('keydown', function(e) {
       if (e.key !== 'Enter') return;
