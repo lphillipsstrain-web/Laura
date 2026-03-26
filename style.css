@@ -932,3 +932,101 @@ h3 {
     align-items: flex-start;
   }
 }
+
+/* ===== Secret gate page ===== */
+
+.gate-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, #0b1220 0, transparent 55%),
+    radial-gradient(circle at bottom right, #020617 0, transparent 55%),
+    #020305;
+}
+
+.gate-wall {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.gate-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 3rem 2.5rem;
+  background: rgba(11, 12, 16, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: var(--radius-md);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.7);
+  min-width: 280px;
+}
+
+.gate-rune {
+  font-size: 2.8rem;
+  color: var(--accent-violet);
+  line-height: 1;
+  animation: gate-pulse 3s ease-in-out infinite;
+}
+
+@keyframes gate-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.08); }
+}
+
+.gate-prompt {
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.gate-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid rgba(148, 163, 184, 0.35);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  letter-spacing: 0.3em;
+  text-align: center;
+  padding: 0.4rem 0.5rem;
+  width: 180px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.gate-input:focus {
+  border-bottom-color: var(--accent-violet);
+}
+
+.gate-error {
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  color: #e07a7a;
+  min-height: 1em;
+  margin: 0;
+}
+
+@keyframes gate-shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px); }
+  40%       { transform: translateX(6px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+}
+
+.gate-shake {
+  animation: gate-shake 0.4s ease;
+}
+
+.secret-content {
+  padding: 4rem 0;
+}
