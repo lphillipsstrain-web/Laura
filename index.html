@@ -413,42 +413,48 @@
   });
 </script>
 
-  <script>
-  // === SECRET DOOR ===
-  // Trigger 1: Click logo 3 times within 2 seconds
-  let logoClicks = 0;
-  let logoTimer = null;
-  const logoImg = document.querySelector('.footer-logo');
+<script>
+  window.addEventListener('load', function () {
 
-  wordmark.addEventListener('click', function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    logoClicks++;
-    if (logoTimer) clearTimeout(logoTimer);
-    if (logoClicks >= 3) {
-      logoClicks = 0;
-      window.location.href = 'getwyrd.html';
-      return;
+    // === SECRET DOOR ===
+    // Trigger 1: Triple-click footer logo
+    const logoImg = document.querySelector('.footer-logo');
+    let logoClicks = 0;
+    let logoTimer = null;
+
+    if (logoImg) {
+      logoImg.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        logoClicks++;
+        if (logoTimer) clearTimeout(logoTimer);
+        if (logoClicks >= 3) {
+          logoClicks = 0;
+          window.location.href = 'getwyrd.html';
+          return;
+        }
+        logoTimer = setTimeout(() => { logoClicks = 0; }, 2000);
+      });
     }
-    logoTimer = setTimeout(() => { logoClicks = 0; }, 2000);
-  });
 
-  // Trigger 2: Konami code  ↑ ↑ ↓ ↓ ← → ← → B A
-  const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown',
-                  'ArrowLeft','ArrowRight','ArrowLeft','ArrowRight',
-                  'b','a'];
-  let konamiPos = 0;
+    // Trigger 2: Konami code ↑ ↑ ↓ ↓ ← → ← → B A
+    const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown',
+                    'ArrowLeft','ArrowRight','ArrowLeft','ArrowRight',
+                    'b','a'];
+    let konamiPos = 0;
 
-  document.addEventListener('keydown', function (e) {
-    if (e.key === KONAMI[konamiPos]) {
-      konamiPos++;
-      if (konamiPos === KONAMI.length) {
+    document.addEventListener('keydown', function (e) {
+      if (e.key === KONAMI[konamiPos]) {
+        konamiPos++;
+        if (konamiPos === KONAMI.length) {
+          konamiPos = 0;
+          window.location.href = 'getwyrd.html';
+        }
+      } else {
         konamiPos = 0;
-        window.location.href = 'getwyrd.html';
       }
-    } else {
-      konamiPos = 0;
-    }
+    });
+
   });
 </script>
   
