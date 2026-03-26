@@ -418,10 +418,11 @@
   // Trigger 1: Click logo 3 times within 2 seconds
   let logoClicks = 0;
   let logoTimer = null;
-  const wordmark = document.querySelector('.wordmark');
+  const logoImg = document.querySelector('.footer-logo');
 
   wordmark.addEventListener('click', function (e) {
     e.preventDefault();
+    e.stopPropagation();
     logoClicks++;
     if (logoTimer) clearTimeout(logoTimer);
     if (logoClicks >= 3) {
