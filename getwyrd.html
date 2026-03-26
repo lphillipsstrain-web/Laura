@@ -11,13 +11,10 @@
   <style>
     :root {
       --bg: #020305;
-      --bg-alt: #05060a;
       --panel: #0b0c10;
-      --panel-soft: #12141a;
-      --border-subtle: rgba(150, 158, 170, 0.25);
-      --accent-amber: #cdd5e0;
-      --accent-moss: #537544;
+      --border-subtle: rgba(150,158,170,0.2);
       --accent-violet: #b7a4e3;
+      --accent-moss: #537544;
       --accent-gold: #c9a84c;
       --accent-ice: #7ab8d4;
       --accent-ember: #c4614a;
@@ -26,12 +23,13 @@
       --shadow-soft: 0 20px 48px rgba(0,0,0,0.7);
       --font-display: "DM Serif Display", serif;
       --font-body: "Space Grotesk", sans-serif;
-      --radius-sm: 6px;
       --radius-md: 12px;
+      --card-w: 220px;
+      --col-gap: 110px;
+      --row-gap: 70px;
     }
  
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
     html { scroll-behavior: smooth; }
  
     body {
@@ -46,19 +44,9 @@
     }
  
     /* ===== GATE ===== */
-    .gate-body-bg {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-    }
- 
     #gateWall {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
       z-index: 100;
       background:
         radial-gradient(circle at top left, #0b1220 0, transparent 55%),
@@ -68,757 +56,580 @@
     }
  
     .gate-box {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.4rem;
+      display: flex; flex-direction: column; align-items: center; gap: 1.4rem;
       padding: 3.5rem 3rem;
-      background: rgba(11, 12, 16, 0.95);
-      border: 1px solid rgba(183, 164, 227, 0.2);
+      background: rgba(11,12,16,0.95);
+      border: 1px solid rgba(183,164,227,0.2);
       border-radius: var(--radius-md);
-      box-shadow:
-        0 0 60px rgba(183, 164, 227, 0.06),
-        0 32px 80px rgba(0,0,0,0.8);
-      min-width: 300px;
-      position: relative;
+      box-shadow: 0 0 60px rgba(183,164,227,0.06), 0 32px 80px rgba(0,0,0,0.8);
+      min-width: 300px; position: relative;
     }
  
     .gate-box::before {
-      content: '';
-      position: absolute;
-      inset: -1px;
+      content: ''; position: absolute; inset: -1px;
       border-radius: calc(var(--radius-md) + 1px);
       background: linear-gradient(135deg, rgba(183,164,227,0.15), transparent 50%, rgba(83,117,68,0.1));
       pointer-events: none;
     }
  
     .gate-rune {
-      font-family: var(--font-display);
-      font-size: 3rem;
-      color: var(--accent-violet);
-      line-height: 1;
-      animation: gate-pulse 4s ease-in-out infinite;
-      letter-spacing: 0.1em;
+      font-family: var(--font-display); font-size: 3rem;
+      color: var(--accent-violet); line-height: 1;
+      animation: gate-pulse 4s ease-in-out infinite; letter-spacing: 0.1em;
     }
  
     @keyframes gate-pulse {
-      0%, 100% { opacity: 0.5; text-shadow: 0 0 20px rgba(183,164,227,0.3); }
-      50%       { opacity: 1;   text-shadow: 0 0 40px rgba(183,164,227,0.7), 0 0 80px rgba(183,164,227,0.3); }
+      0%,100% { opacity:0.5; text-shadow: 0 0 20px rgba(183,164,227,0.3); }
+      50%     { opacity:1;   text-shadow: 0 0 40px rgba(183,164,227,0.7), 0 0 80px rgba(183,164,227,0.3); }
     }
  
-    .gate-prompt {
-      font-size: 0.72rem;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
+    .gate-prompt { font-size:0.72rem; letter-spacing:0.28em; text-transform:uppercase; color:var(--text-muted); }
  
     .gate-input {
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid rgba(183, 164, 227, 0.3);
-      color: var(--text-main);
-      font-family: var(--font-body);
-      font-size: 1rem;
-      letter-spacing: 0.4em;
-      text-align: center;
-      padding: 0.5rem 0.5rem;
-      width: 200px;
-      outline: none;
+      background: transparent; border: none;
+      border-bottom: 1px solid rgba(183,164,227,0.3);
+      color: var(--text-main); font-family: var(--font-body);
+      font-size: 1rem; letter-spacing: 0.4em; text-align: center;
+      padding: 0.5rem; width: 200px; outline: none;
       transition: border-color 0.3s ease;
     }
- 
-    .gate-input:focus {
-      border-bottom-color: var(--accent-violet);
-      box-shadow: 0 4px 12px rgba(183,164,227,0.1);
-    }
- 
-    .gate-hint {
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
-      color: rgba(152,162,179,0.5);
-    }
- 
-    .gate-error {
-      font-size: 0.72rem;
-      letter-spacing: 0.14em;
-      color: #c4614a;
-      min-height: 1em;
-      text-transform: lowercase;
-    }
+    .gate-input:focus { border-bottom-color: var(--accent-violet); }
+    .gate-hint { font-size:0.7rem; letter-spacing:0.12em; color:rgba(152,162,179,0.5); }
+    .gate-error { font-size:0.72rem; letter-spacing:0.14em; color:#c4614a; min-height:1em; text-transform:lowercase; }
  
     @keyframes gate-shake {
-      0%,100% { transform: translateX(0); }
-      20%      { transform: translateX(-7px); }
-      40%      { transform: translateX(7px); }
-      60%      { transform: translateX(-5px); }
-      80%      { transform: translateX(5px); }
+      0%,100%{transform:translateX(0)} 20%{transform:translateX(-7px)}
+      40%{transform:translateX(7px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)}
     }
- 
     .gate-shake { animation: gate-shake 0.45s ease; }
  
-    /* ===== SECRET PAGE ===== */
+    /* ===== PAGE ===== */
     #secretContent { display: none; }
     #secretContent.revealed { display: block; }
  
-    /* Header */
     .wyrd-header {
-      position: sticky;
-      top: 0;
-      z-index: 20;
+      position: sticky; top: 0; z-index: 20;
       backdrop-filter: blur(16px);
       background: linear-gradient(to bottom, rgba(2,3,5,0.97), rgba(2,3,5,0.88));
-      border-bottom: 1px solid rgba(183,164,227,0.15);
+      border-bottom: 1px solid rgba(183,164,227,0.12);
       padding: 0.75rem 0;
     }
  
     .wyrd-header-inner {
-      width: min(1200px, 100% - 2rem);
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      width: min(1400px, 100% - 2rem); margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
     }
  
     .wyrd-wordmark {
-      font-family: var(--font-display);
-      font-size: 0.8rem;
-      letter-spacing: 0.4em;
-      text-transform: uppercase;
-      color: var(--accent-violet);
-      text-decoration: none;
-      opacity: 0.7;
+      font-family: var(--font-display); font-size: 0.8rem;
+      letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--accent-violet); opacity: 0.7;
     }
  
     .wyrd-back {
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      text-decoration: none;
-      opacity: 0.6;
-      transition: opacity 0.2s;
+      font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none; opacity: 0.6; transition: opacity 0.2s;
     }
- 
     .wyrd-back:hover { opacity: 1; color: var(--accent-violet); }
  
-    /* ===== TREE LAYOUT ===== */
     .tree-page {
-      width: min(1300px, 100% - 2rem);
-      margin: 0 auto;
-      padding: 4rem 0 6rem;
+      width: min(1400px, 100% - 2rem); margin: 0 auto;
+      padding: 4rem 0 7rem;
     }
  
     .tree-title {
-      text-align: center;
-      margin-bottom: 0.5rem;
-      font-family: var(--font-display);
+      text-align: center; font-family: var(--font-display);
       font-size: clamp(1.4rem, 2.5vw, 2rem);
-      color: var(--accent-violet);
-      opacity: 0.6;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
+      color: var(--accent-violet); opacity: 0.55;
+      letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 0.4rem;
     }
  
     .tree-subtitle {
-      text-align: center;
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      opacity: 0.4;
-      margin-bottom: 3rem;
+      text-align: center; font-size: 0.72rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--text-muted); opacity: 0.35;
+      margin-bottom: 4rem;
     }
  
-    /* The main tree container — CSS Grid */
-    .tree-grid {
+    /*
+      ===== LAYOUT =====
+      5 rows × 3 cols. Grid columns: card | gap | card | gap | card
+      Row 1: center only   (Ásgarður)
+      Row 2: all three     (Niflheimur | Álfheimur | Jötunheimur)
+      Row 3: center only   (Miðgarður)
+      Row 4: all three     (Dvergheimur | Svartálfaheimur | Múspellsheimur)
+      Row 5: center only   (Hel)
+ 
+      Rows 1,3,5 use invisible spacer cards on cols 1+3 to maintain column width.
+    */
+    .wow-grid {
+      position: relative;
       display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      grid-template-rows: auto auto auto auto auto auto auto;
-      gap: 0;
-      align-items: center;
-      position: relative;
+      grid-template-columns: var(--card-w) var(--col-gap) var(--card-w) var(--col-gap) var(--card-w);
+      grid-template-rows: repeat(5, auto);
+      row-gap: var(--row-gap);
+      justify-content: center;
+      align-items: start;
     }
  
-    /* SVG connector layer — sits behind everything */
-    .tree-svg {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      overflow: visible;
+    #wowSvg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      overflow: visible; pointer-events: none; z-index: 0;
     }
  
-    /* Spine nodes */
-    .spine-node {
-      grid-column: 2;
-      justify-self: center;
-      position: relative;
-      z-index: 2;
-    }
+    .wow-card-wrap { position: relative; z-index: 2; }
  
-    /* Corner nodes */
-    .corner-ul { grid-column: 1; grid-row: 1; justify-self: start; position: relative; z-index: 2; }
-    .corner-ur { grid-column: 3; grid-row: 1; justify-self: end;   position: relative; z-index: 2; }
-    .corner-ll { grid-column: 1; grid-row: 7; justify-self: start; position: relative; z-index: 2; }
-    .corner-lr { grid-column: 3; grid-row: 7; justify-self: end;   position: relative; z-index: 2; }
+    /* Grid placements */
+    .pos-r1-c1 { grid-column:1; grid-row:1; visibility:hidden; pointer-events:none; }
+    .pos-r1-c2 { grid-column:3; grid-row:1; }
+    .pos-r1-c3 { grid-column:5; grid-row:1; visibility:hidden; pointer-events:none; }
  
-    /* Spacers to push corners to correct rows */
-    .spine-1 { grid-row: 2; }
-    .spine-2 { grid-row: 3; }
-    .spine-3 { grid-row: 4; }
-    .spine-4 { grid-row: 5; }
-    .spine-5 { grid-row: 6; }
+    .pos-r2-c1 { grid-column:1; grid-row:2; }
+    .pos-r2-c2 { grid-column:3; grid-row:2; }
+    .pos-r2-c3 { grid-column:5; grid-row:2; }
  
-    /* Row spacers between spine nodes */
-    .row-gap {
-      grid-column: 2;
-      height: 60px;
-    }
-    .row-gap-1 { grid-row: 1; }
-    .row-gap-between-1-2 { grid-row: 2; display: none; } /* handled by margin */
+    .pos-r3-c1 { grid-column:1; grid-row:3; visibility:hidden; pointer-events:none; }
+    .pos-r3-c2 { grid-column:3; grid-row:3; }
+    .pos-r3-c3 { grid-column:5; grid-row:3; visibility:hidden; pointer-events:none; }
+ 
+    .pos-r4-c1 { grid-column:1; grid-row:4; }
+    .pos-r4-c2 { grid-column:3; grid-row:4; }
+    .pos-r4-c3 { grid-column:5; grid-row:4; }
+ 
+    .pos-r5-c1 { grid-column:1; grid-row:5; visibility:hidden; pointer-events:none; }
+    .pos-r5-c2 { grid-column:3; grid-row:5; }
+    .pos-r5-c3 { grid-column:5; grid-row:5; visibility:hidden; pointer-events:none; }
  
     /* ===== NODE CARD ===== */
     .node-card {
       background: var(--panel);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 1.4rem 1.6rem;
-      width: 240px;
+      padding: 1.3rem 1.5rem;
+      width: var(--card-w);
       transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-      cursor: default;
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
+      opacity: 0; transform: translateY(14px);
+      animation: node-appear 0.55s ease forwards;
     }
+ 
+    @keyframes node-appear { to { opacity:1; transform:translateY(0); } }
  
     .node-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-      border-radius: var(--radius-md);
+      content: ''; position: absolute; inset: 0;
+      opacity: 0; transition: opacity 0.3s ease;
+      pointer-events: none; border-radius: var(--radius-md);
     }
- 
-    .node-card:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-soft);
-    }
- 
-    /* Spine node — slightly wider */
-    .spine-node .node-card {
-      width: 260px;
-    }
- 
-    /* Node accent colors */
-    .node-asgardr {
-      border-color: rgba(183,164,227,0.35);
-    }
-    .node-asgardr::before {
-      background: radial-gradient(circle at top, rgba(183,164,227,0.08), transparent 70%);
-    }
-    .node-asgardr:hover { border-color: rgba(183,164,227,0.6); box-shadow: 0 0 30px rgba(183,164,227,0.12), var(--shadow-soft); }
- 
-    .node-alfheimr {
-      border-color: rgba(122,184,212,0.3);
-    }
-    .node-alfheimr::before {
-      background: radial-gradient(circle at top, rgba(122,184,212,0.07), transparent 70%);
-    }
-    .node-alfheimr:hover { border-color: rgba(122,184,212,0.5); box-shadow: 0 0 30px rgba(122,184,212,0.1), var(--shadow-soft); }
- 
-    .node-midgardr {
-      border-color: rgba(83,117,68,0.4);
-    }
-    .node-midgardr::before {
-      background: radial-gradient(circle at center, rgba(83,117,68,0.1), transparent 70%);
-    }
-    .node-midgardr:hover { border-color: rgba(83,117,68,0.7); box-shadow: 0 0 30px rgba(83,117,68,0.15), var(--shadow-soft); }
- 
-    .node-svartalfheimr {
-      border-color: rgba(150,120,80,0.3);
-    }
-    .node-svartalfheimr::before {
-      background: radial-gradient(circle at bottom, rgba(150,120,80,0.07), transparent 70%);
-    }
-    .node-svartalfheimr:hover { border-color: rgba(150,120,80,0.5); box-shadow: 0 0 30px rgba(150,120,80,0.1), var(--shadow-soft); }
- 
-    .node-hel {
-      border-color: rgba(196,97,74,0.25);
-    }
-    .node-hel::before {
-      background: radial-gradient(circle at bottom, rgba(196,97,74,0.08), transparent 70%);
-    }
-    .node-hel:hover { border-color: rgba(196,97,74,0.5); box-shadow: 0 0 30px rgba(196,97,74,0.12), var(--shadow-soft); }
- 
-    .node-niflheimr {
-      border-color: rgba(100,140,180,0.25);
-    }
-    .node-niflheimr:hover { border-color: rgba(100,140,180,0.5); box-shadow: 0 0 30px rgba(100,140,180,0.1), var(--shadow-soft); }
- 
-    .node-jotunheimr {
-      border-color: rgba(180,140,60,0.25);
-    }
-    .node-jotunheimr:hover { border-color: rgba(180,140,60,0.5); box-shadow: 0 0 30px rgba(180,140,60,0.1), var(--shadow-soft); }
- 
-    .node-dvergheimr {
-      border-color: rgba(120,110,100,0.3);
-    }
-    .node-dvergheimr:hover { border-color: rgba(160,150,130,0.5); box-shadow: 0 0 30px rgba(140,130,100,0.1), var(--shadow-soft); }
- 
-    .node-muspellsheimr {
-      border-color: rgba(200,80,50,0.25);
-    }
-    .node-muspellsheimr:hover { border-color: rgba(220,100,60,0.5); box-shadow: 0 0 30px rgba(200,80,50,0.12), var(--shadow-soft); }
- 
-    /* Hover activates ::before */
+    .node-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-soft); }
     .node-card:hover::before { opacity: 1; }
+ 
+    /* Spacer cards never animate */
+    .wow-card-wrap[aria-hidden="true"] .node-card { animation: none; opacity:0; }
+ 
+    /* Realm colors */
+    .node-asgardr       { border-color:rgba(183,164,227,0.35); }
+    .node-asgardr::before { background:radial-gradient(circle at top,rgba(183,164,227,0.09),transparent 70%); }
+    .node-asgardr:hover   { border-color:rgba(183,164,227,0.65); box-shadow:0 0 28px rgba(183,164,227,0.14),var(--shadow-soft); }
+ 
+    .node-alfheimr      { border-color:rgba(122,184,212,0.3); }
+    .node-alfheimr::before { background:radial-gradient(circle at top,rgba(122,184,212,0.08),transparent 70%); }
+    .node-alfheimr:hover   { border-color:rgba(122,184,212,0.55); box-shadow:0 0 28px rgba(122,184,212,0.12),var(--shadow-soft); }
+ 
+    .node-midgardr      { border-color:rgba(83,117,68,0.4); }
+    .node-midgardr::before { background:radial-gradient(circle at center,rgba(83,117,68,0.11),transparent 70%); }
+    .node-midgardr:hover   { border-color:rgba(83,117,68,0.7); box-shadow:0 0 28px rgba(83,117,68,0.16),var(--shadow-soft); }
+ 
+    .node-svartalfheimr { border-color:rgba(150,120,80,0.3); }
+    .node-svartalfheimr::before { background:radial-gradient(circle at bottom,rgba(150,120,80,0.08),transparent 70%); }
+    .node-svartalfheimr:hover   { border-color:rgba(150,120,80,0.55); box-shadow:0 0 28px rgba(150,120,80,0.12),var(--shadow-soft); }
+ 
+    .node-hel           { border-color:rgba(196,97,74,0.28); }
+    .node-hel::before     { background:radial-gradient(circle at bottom,rgba(196,97,74,0.09),transparent 70%); }
+    .node-hel:hover       { border-color:rgba(196,97,74,0.55); box-shadow:0 0 28px rgba(196,97,74,0.14),var(--shadow-soft); }
+ 
+    .node-niflheimr     { border-color:rgba(100,140,180,0.28); }
+    .node-niflheimr:hover { border-color:rgba(100,140,180,0.55); box-shadow:0 0 28px rgba(100,140,180,0.12),var(--shadow-soft); }
+ 
+    .node-jotunheimr    { border-color:rgba(180,140,60,0.28); }
+    .node-jotunheimr:hover { border-color:rgba(180,140,60,0.55); box-shadow:0 0 28px rgba(180,140,60,0.12),var(--shadow-soft); }
+ 
+    .node-dvergheimr    { border-color:rgba(120,110,100,0.28); }
+    .node-dvergheimr:hover { border-color:rgba(160,150,130,0.55); box-shadow:0 0 28px rgba(140,130,100,0.12),var(--shadow-soft); }
+ 
+    .node-muspellsheimr { border-color:rgba(200,80,50,0.28); }
+    .node-muspellsheimr:hover { border-color:rgba(220,100,60,0.55); box-shadow:0 0 28px rgba(200,80,50,0.14),var(--shadow-soft); }
+ 
+    /* Staggered animation delays for visible cards only */
+    .pos-r1-c2 .node-card { animation-delay:0.05s; }
+    .pos-r2-c1 .node-card { animation-delay:0.12s; }
+    .pos-r2-c2 .node-card { animation-delay:0.18s; }
+    .pos-r2-c3 .node-card { animation-delay:0.12s; }
+    .pos-r3-c2 .node-card { animation-delay:0.26s; }
+    .pos-r4-c1 .node-card { animation-delay:0.33s; }
+    .pos-r4-c2 .node-card { animation-delay:0.39s; }
+    .pos-r4-c3 .node-card { animation-delay:0.33s; }
+    .pos-r5-c2 .node-card { animation-delay:0.47s; }
  
     /* Node typography */
     .node-realm {
-      font-family: var(--font-display);
-      font-size: 1.05rem;
-      line-height: 1.2;
-      margin-bottom: 0.2rem;
-      letter-spacing: 0.02em;
+      font-family: var(--font-display); font-size: 1rem;
+      line-height: 1.2; margin-bottom: 0.15rem;
+      display: flex; align-items: center; gap: 0.45rem;
     }
+ 
+    .node-dot {
+      display: inline-block; width:6px; height:6px;
+      border-radius:50%; flex-shrink:0;
+    }
+    .dot-violet { background:#b7a4e3; box-shadow:0 0 7px rgba(183,164,227,0.7); }
+    .dot-ice    { background:#7ab8d4; box-shadow:0 0 7px rgba(122,184,212,0.7); }
+    .dot-moss   { background:#537544; box-shadow:0 0 7px rgba(83,117,68,0.8); }
+    .dot-earth  { background:#a07850; box-shadow:0 0 7px rgba(150,120,80,0.7); }
+    .dot-ember  { background:#c4614a; box-shadow:0 0 7px rgba(196,97,74,0.7); }
+    .dot-mist   { background:#6488aa; box-shadow:0 0 7px rgba(100,140,180,0.6); }
+    .dot-gold   { background:#c9a84c; box-shadow:0 0 7px rgba(201,168,76,0.7); }
+    .dot-stone  { background:#888070; box-shadow:0 0 7px rgba(130,120,100,0.6); }
+    .dot-fire   { background:#d4502a; box-shadow:0 0 7px rgba(200,80,50,0.8); }
  
     .node-realm-en {
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      opacity: 0.5;
-      margin-bottom: 0.6rem;
+      font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase;
+      color:var(--text-muted); opacity:0.45; margin-bottom:0.55rem;
     }
- 
-    .node-essence {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      line-height: 1.55;
-      margin-bottom: 0.9rem;
-    }
- 
+    .node-essence { font-size:0.78rem; color:var(--text-muted); line-height:1.5; margin-bottom:0.85rem; }
     .node-content-area {
-      min-height: 60px;
-      font-size: 0.82rem;
-      color: rgba(152,162,179,0.6);
-      line-height: 1.6;
-      font-style: italic;
-      border-top: 1px solid var(--border-subtle);
-      padding-top: 0.8rem;
+      min-height:52px; font-size:0.8rem; color:rgba(152,162,179,0.55);
+      line-height:1.6; font-style:italic;
+      border-top:1px solid var(--border-subtle); padding-top:0.75rem;
     }
+    .node-content-area p { margin-bottom:0.45rem; }
+    .node-content-area p:last-child { margin-bottom:0; }
  
-    .node-content-area p { margin-bottom: 0.5rem; }
-    .node-content-area p:last-child { margin-bottom: 0; }
- 
-    /* Accent dot */
-    .node-dot {
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      margin-right: 0.5rem;
-      vertical-align: middle;
-      flex-shrink: 0;
-    }
- 
-    .dot-violet  { background: var(--accent-violet); box-shadow: 0 0 8px rgba(183,164,227,0.6); }
-    .dot-ice     { background: var(--accent-ice);    box-shadow: 0 0 8px rgba(122,184,212,0.6); }
-    .dot-moss    { background: var(--accent-moss);   box-shadow: 0 0 8px rgba(83,117,68,0.7); }
-    .dot-earth   { background: #a07850;              box-shadow: 0 0 8px rgba(150,120,80,0.6); }
-    .dot-ember   { background: var(--accent-ember);  box-shadow: 0 0 8px rgba(196,97,74,0.6); }
-    .dot-mist    { background: #6488aa;              box-shadow: 0 0 8px rgba(100,140,180,0.5); }
-    .dot-gold    { background: var(--accent-gold);   box-shadow: 0 0 8px rgba(201,168,76,0.6); }
-    .dot-stone   { background: #888070;              box-shadow: 0 0 8px rgba(130,120,100,0.5); }
-    .dot-fire    { background: #d4502a;              box-shadow: 0 0 8px rgba(200,80,50,0.7); }
- 
-    /* ===== CONNECTOR SVG ===== */
-    #treeConnectors {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      overflow: visible;
-      z-index: 1;
-    }
- 
-    /* ===== SPACING BETWEEN SPINE NODES ===== */
-    .spine-gap {
-      grid-column: 2;
-      height: 32px;
-    }
- 
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 900px) {
-      .tree-grid {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-      }
- 
-      .corner-ul, .corner-ur, .corner-ll, .corner-lr,
-      .spine-1, .spine-2, .spine-3, .spine-4, .spine-5 {
-        grid-column: 1;
-        grid-row: auto;
-        justify-self: center;
-      }
- 
-      .node-card, .spine-node .node-card {
-        width: min(320px, 100%);
-        margin: 0 auto;
-      }
- 
-      #treeConnectors { display: none; }
- 
-      .tree-grid > * {
-        margin-bottom: 1.5rem;
-      }
- 
-      /* Add labels for mobile to indicate realm positions */
-      .corner-ul::before { content: "upper left"; }
-      .corner-ur::before { content: "upper right"; }
-    }
- 
-    /* ===== FADE IN ANIMATION ===== */
-    .node-card {
-      opacity: 0;
-      transform: translateY(16px);
-      animation: node-appear 0.6s ease forwards;
-    }
- 
-    @keyframes node-appear {
-      to { opacity: 1; transform: translateY(0); }
-    }
- 
-    .spine-node:nth-child(1) .node-card  { animation-delay: 0.1s; }
-    .corner-ul .node-card                { animation-delay: 0.2s; }
-    .corner-ur .node-card                { animation-delay: 0.2s; }
-    .spine-node:nth-child(3) .node-card  { animation-delay: 0.3s; }
-    .spine-node:nth-child(4) .node-card  { animation-delay: 0.4s; }
-    .spine-node:nth-child(5) .node-card  { animation-delay: 0.5s; }
-    .spine-node:nth-child(6) .node-card  { animation-delay: 0.6s; }
-    .spine-node:nth-child(7) .node-card  { animation-delay: 0.7s; }
-    .corner-ll .node-card                { animation-delay: 0.8s; }
-    .corner-lr .node-card                { animation-delay: 0.8s; }
- 
-    /* ===== FOOTER ===== */
     .wyrd-footer {
-      text-align: center;
-      padding: 2rem 0 3rem;
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      opacity: 0.3;
+      text-align:center; padding:2rem 0 3rem;
+      font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase;
+      color:var(--text-muted); opacity:0.28;
+    }
+ 
+    /* ===== MOBILE ===== */
+    @media (max-width:800px) {
+      .wow-grid { grid-template-columns:1fr; row-gap:1.4rem; justify-items:center; }
+      .pos-r1-c2,.pos-r2-c1,.pos-r2-c2,.pos-r2-c3,
+      .pos-r3-c2,.pos-r4-c1,.pos-r4-c2,.pos-r4-c3,.pos-r5-c2 {
+        grid-column:1; grid-row:auto; visibility:visible !important;
+      }
+      .pos-r1-c1,.pos-r1-c3,.pos-r3-c1,.pos-r3-c3,.pos-r5-c1,.pos-r5-c3 { display:none; }
+      .node-card { width:min(320px,100%); }
+      #wowSvg { display:none; }
     }
   </style>
 </head>
 <body>
  
-  <!-- GATE WALL -->
-  <div id="gateWall">
-    <div class="gate-box">
-      <div class="gate-rune">⟁</div>
-      <p class="gate-prompt">speak the word</p>
-      <input
-        type="password"
-        id="gateInput"
-        class="gate-input"
-        placeholder="· · ·"
-        autocomplete="off"
-        spellcheck="false"
-        autofocus
-      />
-      <p class="gate-hint">press enter</p>
-      <p id="gateError" class="gate-error" aria-live="polite"></p>
-    </div>
+<!-- GATE -->
+<div id="gateWall">
+  <div class="gate-box">
+    <div class="gate-rune">⟁</div>
+    <p class="gate-prompt">speak the word</p>
+    <input type="password" id="gateInput" class="gate-input"
+      placeholder="· · ·" autocomplete="off" spellcheck="false" autofocus />
+    <p class="gate-hint">press enter</p>
+    <p id="gateError" class="gate-error" aria-live="polite"></p>
   </div>
+</div>
  
-  <!-- SECRET CONTENT -->
-  <div id="secretContent">
+<!-- SECRET CONTENT -->
+<div id="secretContent">
  
-    <header class="wyrd-header">
-      <div class="wyrd-header-inner">
-        <span class="wyrd-wordmark">The Nine Worlds</span>
-        <a href="index.html" class="wyrd-back">← return</a>
+  <header class="wyrd-header">
+    <div class="wyrd-header-inner">
+      <span class="wyrd-wordmark">The Nine Worlds</span>
+      <a href="index.html" class="wyrd-back">← return</a>
+    </div>
+  </header>
+ 
+  <main class="tree-page">
+    <p class="tree-title">Yggdrasil</p>
+    <p class="tree-subtitle">a personal cosmology</p>
+ 
+    <div class="wow-grid" id="wowGrid">
+ 
+      <svg id="wowSvg" aria-hidden="true"></svg>
+ 
+      <!-- ROW 1: Ásgarður only (spacers hold column width) -->
+      <div class="wow-card-wrap pos-r1-c1" aria-hidden="true">
+        <div class="node-card node-asgardr" style="visibility:hidden"></div>
       </div>
-    </header>
- 
-    <main class="tree-page">
-      <p class="tree-title">Yggdrasil</p>
-      <p class="tree-subtitle">a personal cosmology</p>
- 
-      <!-- Tree grid -->
-      <div class="tree-grid" id="treeGrid">
- 
-        <!-- SVG connector layer (drawn by JS after layout) -->
-        <svg id="treeConnectors" aria-hidden="true"></svg>
- 
-        <!-- CORNER: Upper Left — Niflheimur -->
-        <div class="corner-ul">
-          <div class="node-card node-niflheimr">
-            <div class="node-realm">
-              <span class="node-dot dot-mist"></span>Niflheimur
-            </div>
-            <div class="node-realm-en">The World of Mist</div>
-            <p class="node-essence">Instinctive thinking. The subconscious beneath the surface.</p>
-            <div class="node-content-area">
-              <p>Add your writing here.</p>
-            </div>
-          </div>
+      <div class="wow-card-wrap pos-r1-c2">
+        <div class="node-card node-asgardr">
+          <div class="node-realm"><span class="node-dot dot-violet"></span>Ásgarður</div>
+          <div class="node-realm-en">The World of the Aesir</div>
+          <p class="node-essence">Main aspiration, creativity, expression, renewal.</p>
+          <div class="node-content-area"><p>Add your writing here.</p></div>
         </div>
+      </div>
+      <div class="wow-card-wrap pos-r1-c3" aria-hidden="true">
+        <div class="node-card node-asgardr" style="visibility:hidden"></div>
+      </div>
  
-        <!-- CORNER: Upper Right — Jötunheimur -->
-        <div class="corner-ur">
-          <div class="node-card node-jotunheimr">
-            <div class="node-realm">
-              <span class="node-dot dot-gold"></span>Jötunheimur
-            </div>
-            <div class="node-realm-en">The World of Giants</div>
-            <p class="node-essence">The adventure toward the goal. The unexpected and confusing.</p>
-            <div class="node-content-area">
-              <p>Add your writing here.</p>
-            </div>
-          </div>
+      <!-- ROW 2: Niflheimur | Álfheimur | Jötunheimur -->
+      <div class="wow-card-wrap pos-r2-c1">
+        <div class="node-card node-niflheimr">
+          <div class="node-realm"><span class="node-dot dot-mist"></span>Niflheimur</div>
+          <div class="node-realm-en">The World of Mist</div>
+          <p class="node-essence">Instinctive thinking. The subconscious beneath the surface.</p>
+          <div class="node-content-area"><p>Add your writing here.</p></div>
         </div>
- 
-        <!-- SPINE 1: Ásgarður -->
-        <div class="spine-node spine-1">
-          <div class="node-card node-asgardr">
-            <div class="node-realm">
-              <span class="node-dot dot-violet"></span>Ásgarður
-            </div>
-            <div class="node-realm-en">The World of the Aesir</div>
-            <p class="node-essence">Main aspiration, creativity, expression, renewal.</p>
-            <div class="node-content-area">
-              <p>Add your writing here.</p>
-            </div>
-          </div>
+      </div>
+      <div class="wow-card-wrap pos-r2-c2">
+        <div class="node-card node-alfheimr">
+          <div class="node-realm"><span class="node-dot dot-ice"></span>Álfheimur</div>
+          <div class="node-realm-en">The World of Light Elves</div>
+          <p class="node-essence">The conscious mind, dreams, and what lies ahead.</p>
+          <div class="node-content-area"><p>Add your writing here.</p></div>
         </div>
- 
-        <!-- SPINE 2: Álfheimur -->
-        <div class="spine-node spine-2">
-          <div class="node-card node-alfheimr">
-            <div class="node-realm">
-              <span class="node-dot dot-ice"></span>Álfheimur
-            </div>
-            <div class="node-realm-en">The World of the Light Elves</div>
-            <p class="node-essence">The conscious mind, dreams, and what lies ahead.</p>
-            <div class="node-content-area">
-              <p>Add your writing here.</p>
-            </div>
-          </div>
+      </div>
+      <div class="wow-card-wrap pos-r2-c3">
+        <div class="node-card node-jotunheimr">
+          <div class="node-realm"><span class="node-dot dot-gold"></span>Jötunheimur</div>
+          <div class="node-realm-en">The World of Giants</div>
+          <p class="node-essence">The adventure toward the goal. The unexpected and confusing.</p>
+          <div class="node-content-area"><p>Add your writing here.</p></div>
         </div>
+      </div>
  
-        <!-- SPINE 3: Miðgarður (center) -->
-        <div class="spine-node spine-3">
-          <div class="node-card node-midgardr">
-            <div class="node-realm">
-              <span class="node-dot dot-moss"></span>Miðgarður
-            </div>
-            <div class="node-realm-en">The Middle World</div>
-            <p class="node-essence">Ego. Current position. Where I stand right now.</p>
-            <div class="node-content-area">
-              <p>Add your writing here.</p>
-            </div>
-          </div>
+      <!-- ROW 3: Miðgarður only -->
+      <div class="wow-card-wrap pos-r3-c1" aria-hidden="true">
+        <div class="node-card node-midgardr" style="visibility:hidden"></div>
+      </div>
+      <div class="wow-card-wrap pos-r3-c2">
+        <div class="node-card node-midgardr">
+          <div class="node-realm"><span class="node-dot dot-moss"></span>Miðgarður</div>
+          <div class="node-realm-en">The Middle World</div>
+          <p class="node-essence">Ego. Current position. Where I stand right now.</p>
+          <div class="node-content-area"><p>Add your writing here.</p></div>
         </div>
+      </div>
+      <div class="wow-card-wrap pos-r3-c3" aria-hidden="true">
+        <div class="node-card node-midgardr" style="visibility:hidden"></div>
+      </div>
  
-        <!-- SPINE 4: Svartálfaheimur -->
-        <div class="spine-node spine-4">
-          <div class="node-card node-svartalfheimr">
-            <div class="node-realm">
-              <span class="node-dot dot-earth"></span>Svartálfaheimur
-            </div>
-            <div class="node-realm-en">The World of the Dark Elves</div>
-            <p class="node-essence">Past influence. The subconscious at work beneath.</p>
-            <div class="node-content-area">
-              <p>Add your writing here.</p>
-            </div>
-          </div>
+      <!-- ROW 4: Dvergheimur | Svartálfaheimur | Múspellsheimur -->
+      <div class="wow-card-wrap pos-r4-c1">
+        <div class="node-card node-dvergheimr">
+          <div class="node-realm"><span class="node-dot dot-stone"></span>Dvergheimur</div>
+          <div class="node-realm-en">The World of Dwarves</div>
+          <p class="node-essence">Industriousness, craftsmanship. Finance and career.</p>
+          <div class="node-content-area"><p>Add your writing here.</p></div>
         </div>
- 
-        <!-- SPINE 5: Hel -->
-        <div class="spine-node spine-5">
-          <div class="node-card node-hel">
-            <div class="node-realm">
-              <span class="node-dot dot-ember"></span>Hel
-            </div>
-            <div class="node-realm-en">The World of the Dead</div>
-            <p class="node-essence">Dark side. Obstacles standing between me and my aspirations.</p>
-            <div class="node-content-area">
-              <p>Add your writing here.</p>
-            </div>
-          </div>
+      </div>
+      <div class="wow-card-wrap pos-r4-c2">
+        <div class="node-card node-svartalfheimr">
+          <div class="node-realm"><span class="node-dot dot-earth"></span>Svartálfaheimur</div>
+          <div class="node-realm-en">The World of Dark Elves</div>
+          <p class="node-essence">Past influence. The subconscious at work beneath.</p>
+          <div class="node-content-area"><p>Add your writing here.</p></div>
         </div>
- 
-        <!-- CORNER: Lower Left — Dvergheimur -->
-        <div class="corner-ll">
-          <div class="node-card node-dvergheimr">
-            <div class="node-realm">
-              <span class="node-dot dot-stone"></span>Dvergheimur
-            </div>
-            <div class="node-realm-en">The World of the Dwarves</div>
-            <p class="node-essence">Industriousness, craftsmanship. Finance and career.</p>
-            <div class="node-content-area">
-              <p>Add your writing here.</p>
-            </div>
-          </div>
+      </div>
+      <div class="wow-card-wrap pos-r4-c3">
+        <div class="node-card node-muspellsheimr">
+          <div class="node-realm"><span class="node-dot dot-fire"></span>Múspellsheimur</div>
+          <div class="node-realm-en">The World of Fire</div>
+          <p class="node-essence">Origin of catastrophe. Strength, wrath, and warning.</p>
+          <div class="node-content-area"><p>Add your writing here.</p></div>
         </div>
+      </div>
  
-        <!-- CORNER: Lower Right — Múspellsheimur -->
-        <div class="corner-lr">
-          <div class="node-card node-muspellsheimr">
-            <div class="node-realm">
-              <span class="node-dot dot-fire"></span>Múspellsheimur
-            </div>
-            <div class="node-realm-en">The World of Fire</div>
-            <p class="node-essence">Origin of catastrophe. Strength, wrath, and warning.</p>
-            <div class="node-content-area">
-              <p>Add your writing here.</p>
-            </div>
-          </div>
+      <!-- ROW 5: Hel only -->
+      <div class="wow-card-wrap pos-r5-c1" aria-hidden="true">
+        <div class="node-card node-hel" style="visibility:hidden"></div>
+      </div>
+      <div class="wow-card-wrap pos-r5-c2">
+        <div class="node-card node-hel">
+          <div class="node-realm"><span class="node-dot dot-ember"></span>Hel</div>
+          <div class="node-realm-en">The World of the Dead</div>
+          <p class="node-essence">Dark side. Obstacles standing between me and my aspirations.</p>
+          <div class="node-content-area"><p>Add your writing here.</p></div>
         </div>
+      </div>
+      <div class="wow-card-wrap pos-r5-c3" aria-hidden="true">
+        <div class="node-card node-hel" style="visibility:hidden"></div>
+      </div>
  
-      </div><!-- /tree-grid -->
-    </main>
+    </div>
+  </main>
  
-    <footer class="wyrd-footer">
-      <p>⟁ yggdrasil ⟁</p>
-    </footer>
+  <footer class="wyrd-footer"><p>⟁ yggdrasil ⟁</p></footer>
  
-  </div><!-- /secretContent -->
+</div>
  
-  <script>
-    // ===== GATE =====
-    const CORRECT = 'CelestialDelights'; // <-- change this
- 
-    const wall      = document.getElementById('gateWall');
-    const input     = document.getElementById('gateInput');
-    const error     = document.getElementById('gateError');
-    const content   = document.getElementById('secretContent');
+<script>
+  const CORRECT = 'CelestialDelights';
+  const wall    = document.getElementById('gateWall');
+  const input   = document.getElementById('gateInput');
+  const error   = document.getElementById('gateError');
+  const content = document.getElementById('secretContent');
  
   if (sessionStorage.getItem('wyrd_auth') === '1') {
     wall.remove();
     content.classList.add('revealed');
-    setTimeout(drawConnectors, 400);
+    setTimeout(drawWow, 400);
   }
  
-    input.addEventListener('keydown', function(e) {
-      if (e.key !== 'Enter') return;
-      const val = input.value.trim().toLowerCase();
-      if (val === CORRECT.toLowerCase()) {
-        sessionStorage.setItem('wyrd_auth', '1');
-        wall.style.opacity = '0';
-        setTimeout(() => {
-          wall.remove();
-          content.classList.add('revealed');
-          setTimeout(drawConnectors, 400);
-        }, 800);
-      } else {
-        error.textContent = 'the threshold does not open';
-        input.value = '';
-        input.classList.add('gate-shake');
-        setTimeout(() => input.classList.remove('gate-shake'), 500);
-      }
-    });
+  input.addEventListener('keydown', function(e) {
+    if (e.key !== 'Enter') return;
+    const val = input.value.trim().toLowerCase();
+    if (val === CORRECT.toLowerCase()) {
+      sessionStorage.setItem('wyrd_auth', '1');
+      wall.style.opacity = '0';
+      setTimeout(() => {
+        wall.remove();
+        content.classList.add('revealed');
+        setTimeout(drawWow, 500);
+      }, 800);
+    } else {
+      error.textContent = 'the threshold does not open';
+      input.value = '';
+      input.classList.add('gate-shake');
+      setTimeout(() => input.classList.remove('gate-shake'), 500);
+    }
+  });
  
-    // ===== SVG CONNECTORS =====
-    function drawConnectors() {
-      const grid  = document.getElementById('treeGrid');
-      const svg   = document.getElementById('treeConnectors');
-      const gRect = grid.getBoundingClientRect();
+  function drawWow() {
+    const grid  = document.getElementById('wowGrid');
+    const svg   = document.getElementById('wowSvg');
+    const gRect = grid.getBoundingClientRect();
  
-      function center(el) {
-        const r = el.getBoundingClientRect();
-        return {
-          x: r.left - gRect.left + r.width / 2,
-          y: r.top  - gRect.top  + r.height / 2,
-          top:    r.top  - gRect.top,
-          bottom: r.bottom - gRect.top,
-          left:   r.left - gRect.left,
-          right:  r.right - gRect.left,
-        };
-      }
+    svg.innerHTML = '';
+    svg.setAttribute('viewBox', `0 0 ${gRect.width} ${gRect.height}`);
  
-      const ul = center(document.querySelector('.corner-ul .node-card'));
-      const ur = center(document.querySelector('.corner-ur .node-card'));
-      const ll = center(document.querySelector('.corner-ll .node-card'));
-      const lr = center(document.querySelector('.corner-lr .node-card'));
-      const s1 = center(document.querySelector('.spine-1 .node-card'));
-      const s2 = center(document.querySelector('.spine-2 .node-card'));
-      const s3 = center(document.querySelector('.spine-3 .node-card'));
-      const s4 = center(document.querySelector('.spine-4 .node-card'));
-      const s5 = center(document.querySelector('.spine-5 .node-card'));
- 
-      svg.setAttribute('viewBox', `0 0 ${gRect.width} ${gRect.height}`);
- 
-      // Colors for each connection
-      const colors = {
-        spine:    'rgba(183,164,227,0.18)',
-        nifl:     'rgba(100,140,180,0.25)',
-        jotun:    'rgba(201,168,76,0.22)',
-        dverg:    'rgba(130,120,100,0.22)',
-        musp:     'rgba(200,80,50,0.25)',
+    // Get bounding box of a visible node card
+    function pos(sel) {
+      const wrap = grid.querySelector(sel);
+      if (!wrap) return null;
+      // find the visible card (not a spacer)
+      const card = wrap.querySelector('.node-card');
+      if (!card) return null;
+      const r = card.getBoundingClientRect();
+      return {
+        x: r.left - gRect.left + r.width  / 2,
+        y: r.top  - gRect.top  + r.height / 2,
+        t: r.top    - gRect.top,
+        b: r.bottom - gRect.top,
+        l: r.left   - gRect.left,
+        r: r.right  - gRect.left,
       };
- 
-      function glowLine(x1, y1, x2, y2, color, blur, width) {
-        const path = document.createElementNS('http://www.w3.org/2000/svg','path');
-        // Blend of organic (slight curve) and geometric (mid-angle break)
-        const mx = (x1 + x2) / 2;
-        const my = (y1 + y2) / 2;
-        // slight organic curve via quadratic bezier with gentle offset
-        const ox = (y2 - y1) * 0.08;
-        const oy = (x1 - x2) * 0.06;
-        const d = `M ${x1} ${y1} Q ${mx + ox} ${my + oy}, ${x2} ${y2}`;
-        path.setAttribute('d', d);
-        path.setAttribute('fill', 'none');
-        path.setAttribute('stroke', color);
-        path.setAttribute('stroke-width', width || 1);
-        path.setAttribute('opacity', '1');
-        if (blur) {
-          path.style.filter = `blur(${blur}px)`;
-        }
-        return path;
-      }
- 
-      function addGlowPair(x1, y1, x2, y2, color) {
-        // Outer glow (blurred, wider)
-        svg.appendChild(glowLine(x1, y1, x2, y2, color, 3, 3));
-        // Inner crisp line
-        svg.appendChild(glowLine(x1, y1, x2, y2, color.replace(/[\d.]+\)$/, '0.7)'), 0, 0.5));
-      }
- 
-      // Spine connections (top to bottom)
-      addGlowPair(s1.x, s1.bottom, s2.x, s2.top,   colors.spine);
-      addGlowPair(s2.x, s2.bottom, s3.x, s3.top,   colors.spine);
-      addGlowPair(s3.x, s3.bottom, s4.x, s4.top,   colors.spine);
-      addGlowPair(s4.x, s4.bottom, s5.x, s5.top,   colors.spine);
- 
-      // Upper corners → spine top (Ásgarður)
-      addGlowPair(ul.right, ul.y,   s1.left, s1.y,  colors.nifl);
-      addGlowPair(ur.left,  ur.y,   s1.right, s1.y, colors.jotun);
- 
-      // Lower corners → spine bottom (Hel)
-      addGlowPair(ll.right, ll.y,   s5.left, s5.y,  colors.dverg);
-      addGlowPair(lr.left,  lr.y,   s5.right, s5.y, colors.musp);
     }
  
-    // Redraw on resize
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        if (document.getElementById('secretContent').classList.contains('revealed')) {
-          const svg = document.getElementById('treeConnectors');
-          while (svg.firstChild) svg.removeChild(svg.firstChild);
-          drawConnectors();
-        }
-      }, 150);
-    });
-  </script>
-
+    // All 9 nodes
+    const asg  = pos('.pos-r1-c2');
+    const nifl = pos('.pos-r2-c1');
+    const alf  = pos('.pos-r2-c2');
+    const jot  = pos('.pos-r2-c3');
+    const mid  = pos('.pos-r3-c2');
+    const dve  = pos('.pos-r4-c1');
+    const sva  = pos('.pos-r4-c2');
+    const mus  = pos('.pos-r4-c3');
+    const hel  = pos('.pos-r5-c2');
+ 
+    if (!asg || !nifl || !alf || !jot || !mid || !dve || !sva || !mus || !hel) return;
+ 
+    // Per-line colors: glow + crisp core
+    const C = {
+      spine:  { glow:'rgba(183,164,227,0.45)', line:'rgba(210,195,245,0.88)' },
+      nifl:   { glow:'rgba(100,140,180,0.4)',  line:'rgba(130,170,210,0.82)' },
+      jot:    { glow:'rgba(201,168,76,0.4)',   line:'rgba(225,190,95,0.82)'  },
+      dve:    { glow:'rgba(130,120,100,0.38)', line:'rgba(165,152,125,0.78)' },
+      mus:    { glow:'rgba(200,80,50,0.4)',    line:'rgba(230,105,65,0.82)'  },
+      h_mid:  { glow:'rgba(155,175,160,0.38)', line:'rgba(185,205,190,0.78)' },
+    };
+ 
+    const EXT = 10; // runic overshoot
+ 
+    function stroke(x1, y1, x2, y2, col, ext) {
+      if (ext) {
+        const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy)||1;
+        x1-=(dx/len)*ext; y1-=(dy/len)*ext;
+        x2+=(dx/len)*ext; y2+=(dy/len)*ext;
+      }
+      // slight organic bow
+      const mx=(x1+x2)/2+(y2-y1)*0.025;
+      const my=(y1+y2)/2+(x1-x2)*0.018;
+      const d=`M${x1.toFixed(1)} ${y1.toFixed(1)} Q${mx.toFixed(1)} ${my.toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}`;
+ 
+      const p1=document.createElementNS('http://www.w3.org/2000/svg','path');
+      p1.setAttribute('d',d); p1.setAttribute('fill','none');
+      p1.setAttribute('stroke',col.glow); p1.setAttribute('stroke-width','7');
+      p1.setAttribute('stroke-linecap','round'); p1.style.filter='blur(7px)';
+      svg.appendChild(p1);
+ 
+      const p2=document.createElementNS('http://www.w3.org/2000/svg','path');
+      p2.setAttribute('d',d); p2.setAttribute('fill','none');
+      p2.setAttribute('stroke',col.glow); p2.setAttribute('stroke-width','2.5');
+      p2.setAttribute('stroke-linecap','round'); p2.style.filter='blur(2px)';
+      svg.appendChild(p2);
+ 
+      const p3=document.createElementNS('http://www.w3.org/2000/svg','path');
+      p3.setAttribute('d',d); p3.setAttribute('fill','none');
+      p3.setAttribute('stroke',col.line); p3.setAttribute('stroke-width','0.8');
+      p3.setAttribute('stroke-linecap','round');
+      svg.appendChild(p3);
+    }
+ 
+    // ── 3 VERTICALS ──
+    // Left:   Niflheimur → Dvergheimur
+    stroke(nifl.x, nifl.b, dve.x,  dve.t,  C.nifl,  EXT);
+    // Centre: Ásgarður → Álfheimur → Miðgarður → Svartálfaheimur → Hel
+    stroke(asg.x,  asg.b,  alf.x,  alf.t,  C.spine, EXT);
+    stroke(alf.x,  alf.b,  mid.x,  mid.t,  C.spine, EXT);
+    stroke(mid.x,  mid.b,  sva.x,  sva.t,  C.spine, EXT);
+    stroke(sva.x,  sva.b,  hel.x,  hel.t,  C.spine, EXT);
+    // Right:  Jötunheimur → Múspellsheimur
+    stroke(jot.x,  jot.b,  mus.x,  mus.t,  C.jot,   EXT);
+ 
+    // ── 3 HORIZONTALS ──
+    // Row 2: Niflheimur — Álfheimur — Jötunheimur
+    stroke(nifl.r, nifl.y, alf.l,  alf.y,  C.nifl,  EXT);
+    stroke(alf.r,  alf.y,  jot.l,  jot.y,  C.jot,   EXT);
+    // Row 4: Dvergheimur — Svartálfaheimur — Múspellsheimur
+    stroke(dve.r,  dve.y,  sva.l,  sva.y,  C.dve,   EXT);
+    stroke(sva.r,  sva.y,  mus.l,  mus.y,  C.mus,   EXT);
+    // Row 3 mid-horizontal: Niflheimur col ↔ Miðgarður ↔ Jötunheimur col (implied Web line)
+    stroke(nifl.x, mid.y,  alf.l,  mid.y,  C.h_mid, EXT);
+    stroke(alf.r,  mid.y,  jot.x,  mid.y,  C.h_mid, EXT);
+ 
+    // ── DIAGONALS (Web of Wyrd X pattern) ──
+    // Top X through Álfheimur (row 2 center)
+    stroke(nifl.r, nifl.t, jot.l,  jot.t,  C.h_mid, EXT); // top horizontal of row 2
+    stroke(nifl.r, nifl.b, jot.l,  jot.b,  C.h_mid, EXT); // bottom horizontal of row 2
+    stroke(nifl.r, nifl.t, alf.x,  alf.b,  C.nifl,  0);   // nifl → bottom of alf
+    stroke(jot.l,  jot.t,  alf.x,  alf.b,  C.jot,   0);   // jot  → bottom of alf
+    stroke(nifl.r, nifl.b, alf.x,  alf.t,  C.nifl,  0);   // nifl → top of alf
+    stroke(jot.l,  jot.b,  alf.x,  alf.t,  C.jot,   0);   // jot  → top of alf
+ 
+    // Bottom X through Svartálfaheimur (row 4 center)
+    stroke(dve.r,  dve.t,  mus.l,  mus.t,  C.h_mid, EXT); // top horizontal of row 4
+    stroke(dve.r,  dve.b,  mus.l,  mus.b,  C.h_mid, EXT); // bottom horizontal of row 4
+    stroke(dve.r,  dve.t,  sva.x,  sva.b,  C.dve,   0);   // dve  → bottom of sva
+    stroke(mus.l,  mus.t,  sva.x,  sva.b,  C.mus,   0);   // mus  → bottom of sva
+    stroke(dve.r,  dve.b,  sva.x,  sva.t,  C.dve,   0);   // dve  → top of sva
+    stroke(mus.l,  mus.b,  sva.x,  sva.t,  C.mus,   0);   // mus  → top of sva
+ 
+    // Long sweeping diagonals: top node (Ásgarður) to bottom corners
+    stroke(asg.l,  asg.b,  dve.r,  dve.t,  C.spine, 0);
+    stroke(asg.r,  asg.b,  mus.l,  mus.t,  C.spine, 0);
+    // Long sweeping diagonals: bottom node (Hel) to top corners
+    stroke(hel.l,  hel.t,  nifl.r, nifl.b, C.spine, 0);
+    stroke(hel.r,  hel.t,  jot.l,  jot.b,  C.spine, 0);
+  }
+ 
+  let rTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(rTimer);
+    rTimer = setTimeout(() => {
+      if (content.classList.contains('revealed')) drawWow();
+    }, 150);
+  });
+</script>
+ 
 </body>
 </html>
